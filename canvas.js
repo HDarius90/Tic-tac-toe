@@ -3,51 +3,61 @@ window.addEventListener("load", () => {
     const ctx = canvas.getContext("2d");
 
     //Resizing
-    canvas.height = window.innerHeight/1.1;
-    canvas.width = window.innerWidth/2;
+    canvas.height = 699;
+    canvas.width = 699;
 
-    //ctx.fillStyle = 'blue';
-   // ctx.fillRect(50, 50, 200, 200);
+
     ctx.strokeStyle = '#0DA192';
-    //ctx.strokeRect(250, 250, 300, 300)
-
     ctx.lineWidth = 15;
 
+
+
     ctx.beginPath();
-    ctx.moveTo(320, 20);
-    ctx.lineTo(320, 826);
-    ctx.moveTo(640, 20);
-    ctx.lineTo(640, 826);
-    ctx.moveTo(20, 282);
-    ctx.lineTo(940, 282);
-    ctx.moveTo(20, 564);
-    ctx.lineTo(940, 564);
+    ctx.moveTo(233, 20);
+    ctx.lineTo(233, 679);
+    ctx.moveTo(466, 20);
+    ctx.lineTo(466, 679);
+    ctx.moveTo(20, 233);
+    ctx.lineTo(679, 233);
+    ctx.moveTo(20, 466);
+    ctx.lineTo(679, 466);
     ctx.closePath();
 
     ctx.stroke();
 
-
-    //variables
-    let painting = false;
-
-
-    function startPosition() {
-        painting = true;
-    }
-    function finishPosition() {
-        painting = false;
-    }
-    function draw(e) {
-        if (!painting) return;
-        ctx.lineWidth = 10;
-        ctx.lineCap = 'round';
-
-        ctx.lineTo(e.clientX, e.clientY);
+    function drawX (x,y){
+        ctx.moveTo(x+40,y+40);
+        ctx.lineTo(x+193,y+193);
+        ctx.moveTo(x+193,y+40);
+        ctx.lineTo(x+40,y+193);
         ctx.stroke();
 
     }
+
+    drawX(0,0);
+    drawX(233,0);
+    drawX(466,0);
+    drawX(0,233);
+    drawX(0,466);
+    drawX(466,233);
+    drawX(233,466);
+    drawX(233,233);
+    drawX(466,466);
+
+
+    
+
+
+
+    function getCursorPosition(canvas, event) {
+        const rect = canvas.getBoundingClientRect()
+        const x = event.clientX - rect.left
+        const y = event.clientY - rect.top
+        console.log("x: " + x + " y: " + y)
+    }
+
     //EventListeners
-    canvas.addEventListener('mousedown', startPosition);
-    canvas.addEventListener('mouseup', finishPosition);
-    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mousedown', function(e) {
+       console.log(getCursorPosition(canvas, e)); 
+    })
 });
