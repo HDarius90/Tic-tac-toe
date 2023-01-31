@@ -25,27 +25,29 @@ window.addEventListener("load", () => {
 
     ctx.stroke();
 
-    function drawX (x,y){
-        ctx.moveTo(x+40,y+40);
-        ctx.lineTo(x+193,y+193);
-        ctx.moveTo(x+193,y+40);
-        ctx.lineTo(x+40,y+193);
+    function drawX(x, y) {
+        ctx.strokeStyle = '#545454';
+        ctx.beginPath();
+        ctx.moveTo(x + 40, y + 40);
+        ctx.lineTo(x + 193, y + 193);
+        ctx.moveTo(x + 193, y + 40);
+        ctx.lineTo(x + 40, y + 193);
         ctx.stroke();
-
+        ctx.closePath();
     }
 
-    drawX(0,0);
-    drawX(233,0);
-    drawX(466,0);
-    drawX(0,233);
-    drawX(0,466);
-    drawX(466,233);
-    drawX(233,466);
-    drawX(233,233);
-    drawX(466,466);
+    function drawO(x, y) {
+        ctx.strokeStyle = 'white';
+        ctx.beginPath();
+        ctx.arc(x+116.5, y+116.5, 70, 0, 2 * Math.PI);
+        ctx.stroke();
+    }
+
+    //drawO(0,0);
 
 
-    
+
+
 
 
 
@@ -54,10 +56,34 @@ window.addEventListener("load", () => {
         const x = event.clientX - rect.left
         const y = event.clientY - rect.top
         console.log("x: " + x + " y: " + y)
+
+
+        if (x > 0 && x < 233 && y > 0 && y < 233) {
+            drawX(0, 0);
+        } else if (x > 233 && x < 466 && y > 0 && y < 233) {
+            drawO(233, 0);
+        } else if (x > 466 && x < 699 && y > 0 && y < 233) {
+            drawX(466, 0);
+        } else if (x > 0 && x < 233 && y > 233 && y < 466) {
+            drawO(0, 233);
+        } else if (x > 0 && x < 233 && y > 466 && y < 699) {
+            drawX(0, 466);
+        } else if (x > 466 && x < 699 && y > 233 && y < 466) {
+            drawO(466, 233);
+        } else if (x > 233 && x < 466 && y > 466 && y < 699) {
+            drawX(233, 466);
+        } else if (x > 233 && x < 466 && y > 233 && y < 466) {
+            drawO(233, 233);
+        } else if (x > 466 && x < 699 && y > 466 && y < 699) {
+            drawX(466, 466);
+        }
     }
 
+
+
     //EventListeners
-    canvas.addEventListener('mousedown', function(e) {
-       console.log(getCursorPosition(canvas, e)); 
+    canvas.addEventListener('click', function (e) {
+        console.log(getCursorPosition(canvas, e));
+
     })
 });
