@@ -48,13 +48,6 @@ window.addEventListener("load", () => {
     }
 
 
-
-
-
-
-
-
-
     function gameFlow(canvas, event, isItMyTurn, game) {
         const rect = canvas.getBoundingClientRect()
         const x = event.clientX - rect.left
@@ -145,16 +138,19 @@ window.addEventListener("load", () => {
         }
         console.log(game);
         if (checkProgress(game)) {
-            if(checkProgress(game)[1]===true){
-                document.getElementById("result").innerText = "winer";
-            }else {
+            if (checkProgress(game)[1] === true) {
+                document.getElementById("result").innerText = "winner";
+            } else {
                 document.getElementById("result").innerText = "looser";
 
             }
-            canvas.removeEventListener('click', );
-            
+            console.log("removed");
+            canvas.removeEventListener('click', handler);
+
         }
     }
+
+    
 
     function checkProgress(game) {
         let isItOver = false;
@@ -192,9 +188,11 @@ window.addEventListener("load", () => {
         }
     }
 
-    //EventListeners
-    canvas.addEventListener('click', function (e) {
+    var handler = function (e) {
         gameFlow(canvas, e, isItMyTurn, game);
 
-    })
+    }
+    //EventListeners
+    canvas.addEventListener('click', handler);
+
 });
