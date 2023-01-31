@@ -2,6 +2,7 @@ window.addEventListener("load", () => {
     const canvas = document.querySelector('#canvas');
     const ctx = canvas.getContext("2d");
     let isItMyTurn = true;
+    let game = [[], [], []];
 
     //Resizing
     canvas.height = 699;
@@ -54,7 +55,7 @@ window.addEventListener("load", () => {
 
 
 
-    function getCursorPosition(canvas, event, isItMyTurn) {
+    function gameFlow(canvas, event, isItMyTurn, game) {
         const rect = canvas.getBoundingClientRect()
         const x = event.clientX - rect.left
         const y = event.clientY - rect.top
@@ -62,38 +63,94 @@ window.addEventListener("load", () => {
 
 
         if (x > 0 && x < 233 && y > 0 && y < 233) {
-            if (isItMyTurn) drawX(0, 0); else drawO(0, 0);
+            if (isItMyTurn) {
+                drawX(0, 0);
+                game[0][0] = 'X';
+            } else {
+                drawO(0, 0);
+                game[0][0] = 'O';
+            }
 
         } else if (x > 233 && x < 466 && y > 0 && y < 233) {
-            if (isItMyTurn) drawX(233, 0); else drawO(233, 0);
+            if (isItMyTurn) {
+                drawX(233, 0);
+                game[0][1] = 'X';
+            } else {
+                drawO(233, 0);
+                game[0][1] = 'O';
+            }
 
         } else if (x > 466 && x < 699 && y > 0 && y < 233) {
-             if (isItMyTurn) drawX(466, 0); else drawO(466, 0);
+            if (isItMyTurn) {
+                drawX(466, 0);
+                game[0][2] = 'X';
+            } else {
+                drawO(466, 0);
+                game[0][2] = 'O';
+            }
 
         } else if (x > 0 && x < 233 && y > 233 && y < 466) {
-            drawO(0, 233);
+            if (isItMyTurn) {
+                drawX(0, 233);
+                game[1][0] = 'X';
+            } else {
+                drawO(0, 233);
+                game[1][0] = 'O';
+            }
+            
         } else if (x > 0 && x < 233 && y > 466 && y < 699) {
-            if (isItMyTurn) drawX(0, 466); else drawO(0, 466);
+            if (isItMyTurn) {
+                drawX(0, 466);
+                game[2][0] = 'X';
+            } else {
+                drawO(0, 466);
+                game[2][0] = 'O';
+            }
 
         } else if (x > 466 && x < 699 && y > 233 && y < 466) {
-            if (isItMyTurn) drawX(466, 233); else drawO(466, 233);
+            if (isItMyTurn) {
+                drawX(466, 233);
+                game[1][2] = 'X';
+            } else {
+                drawO(466, 233);
+                game[1][2] = 'O';
+            }
 
         } else if (x > 233 && x < 466 && y > 466 && y < 699) {
-            if (isItMyTurn) drawX(233, 466); else drawO(233, 466);
+            if (isItMyTurn) {
+                drawX(233, 466);
+                game[2][1] = 'X';
+            } else {
+                drawO(233, 466);
+                game[2][1] = 'O';
+            }
 
         } else if (x > 233 && x < 466 && y > 233 && y < 466) {
-            if (isItMyTurn) drawX(233, 233); else drawO(233, 233);
+            if (isItMyTurn) {
+                drawX(233, 233);
+                game[1][1] = 'X';
+            } else {
+                drawO(233, 233);
+                game[1][1] = 'O';
+            }
 
         } else if (x > 466 && x < 699 && y > 466 && y < 699) {
-            if (isItMyTurn) drawX(466, 466); else drawO(466, 466);
+            if (isItMyTurn) {
+                drawX(466, 466);
+                game[2][2] = 'X';
+            } else {
+                drawO(466, 466);
+                game[2][2] = 'O';
+            }
         }
+        console.log(game);
     }
 
 
 
     //EventListeners
     canvas.addEventListener('click', function (e) {
-        console.log(getCursorPosition(canvas, e, isItMyTurn));
+        console.log(gameFlow(canvas, e, isItMyTurn, game));
 
     })
 });
