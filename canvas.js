@@ -97,7 +97,7 @@ window.addEventListener("load", () => {
                 drawO(0, 233);
                 game[1][0] = 'O';
             }
-            
+
         } else if (x > 0 && x < 233 && y > 466 && y < 699) {
             if (isItMyTurn) {
                 drawX(0, 466);
@@ -144,13 +144,53 @@ window.addEventListener("load", () => {
             }
         }
         console.log(game);
+        if (checkProgress(game)) {
+            canvas.removeEventListener('click', function (e){
+                
+            });
+            
+        }
     }
 
+    function checkProgress(game) {
+        let isItOver = false;
+        let didIWin = false;
+        for (const row of game) {
+            if (row[0] === row[1] && row[1] === row[2] && row[0]) {
+                isItOver = true;
+                if (row[0] === 'X') {
+                    didIWin = true;
+                    return [isItOver, didIWin];
 
+                }
+                return [isItOver, didIWin];
+            }
+        }
+
+        for (let i = 0; i < 3; i++) {
+            if (game[0][i] === game[1][i] && game[1][i] === game[2][i] && game[0][i]) {
+                isItOver = true;
+                if (game[0][i] === 'X') {
+                    didIWin = true;
+                    return [isItOver, didIWin];
+                }
+                return [isItOver, didIWin];
+            }
+        }
+
+        if (((game[0][0] === game[1][1] && game[1][1] === game[2][2]) || (game[0][2] === game[1][1] && game[1][1] === game[2][0])) && game[1][1]) {
+            isItOver = true;
+            if (game[1][1] === 'X') {
+                didIWin = true;
+                return [isItOver, didIWin];
+            }
+            return [isItOver, didIWin];
+        }
+    }
 
     //EventListeners
     canvas.addEventListener('click', function (e) {
-        console.log(gameFlow(canvas, e, isItMyTurn, game));
+        gameFlow(canvas, e, isItMyTurn, game);
 
     })
 });
