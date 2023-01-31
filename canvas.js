@@ -145,9 +145,13 @@ window.addEventListener("load", () => {
         }
         console.log(game);
         if (checkProgress(game)) {
-            canvas.removeEventListener('click', function (e){
-                
-            });
+            if(checkProgress(game)[1]===true){
+                document.getElementById("result").innerText = "winer";
+            }else {
+                document.getElementById("result").innerText = "looser";
+
+            }
+            canvas.removeEventListener('click', );
             
         }
     }
