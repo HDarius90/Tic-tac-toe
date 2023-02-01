@@ -52,7 +52,6 @@ window.addEventListener("load", () => {
         const rect = canvas.getBoundingClientRect()
         const x = event.clientX - rect.left
         const y = event.clientY - rect.top
-        console.log("x: " + x + " y: " + y)
 
 
         if (x > 0 && x < 233 && y > 0 && y < 233) {
@@ -137,6 +136,7 @@ window.addEventListener("load", () => {
             }
         }
         console.log(game);
+        console.log(cpMoove(game)); 
         if (checkProgress(game)) {
             if (checkProgress(game)[1] === true) {
                 document.getElementById("result").innerText = "winner";
@@ -144,7 +144,6 @@ window.addEventListener("load", () => {
                 document.getElementById("result").innerText = "looser";
 
             }
-            console.log("removed");
             canvas.removeEventListener('click', handler);
 
         }
@@ -187,6 +186,19 @@ window.addEventListener("load", () => {
             return [isItOver, didIWin];
         }
     }
+
+    function cpMoove(currentGame){
+        let indexOfRow = Math.floor((Math.random() * 3));
+        let indexOfCCol = Math.floor((Math.random() * 3));
+      
+        while(currentGame[indexOfRow][indexOfCCol]){
+            indexOfRow = Math.floor((Math.random() * 3));
+            indexOfCCol = Math.floor((Math.random() * 3));
+        }
+        return [indexOfRow, indexOfCCol];
+    }
+
+
 
     var handler = function (e) {
         gameFlow(canvas, e, isItMyTurn, game);
