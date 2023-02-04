@@ -39,92 +39,111 @@ window.addEventListener("load", () => {
 
         if (x > 0 && x < 233 && y > 0 && y < 233) {
             if (isItMyTurn) {
-                drawX(0, 0);
-                game[0][0] = 'X';
-                setTimeout(() => {
-                    cpuMoove(game, mooveCount, checkProgress);
-                    finishRound(checkProgress, game)
-                }, 1000);
+                if (game[0][0] === '') {
+                    drawX(0, 0);
+                    game[0][0] = 'X';
+                    setTimeout(() => {
+                        cpuMoove(game, mooveCount, checkProgress);
+                        finishRound(checkProgress, game)
+                    }, 1000);
+                }
+
             }
 
         } else if (x > 233 && x < 466 && y > 0 && y < 233) {
             if (isItMyTurn) {
-                drawX(233, 0);
-                game[0][1] = 'X';
-                setTimeout(() => {
-                    cpuMoove(game, mooveCount, checkProgress);
-                    finishRound(checkProgress, game)
-                }, 1000);
+                if (game[0][1] === '') {
+                    drawX(233, 0);
+                    game[0][1] = 'X';
+                    setTimeout(() => {
+                        cpuMoove(game, mooveCount, checkProgress);
+                        finishRound(checkProgress, game)
+                    }, 1000);
+                }
             }
 
         } else if (x > 466 && x < 699 && y > 0 && y < 233) {
             if (isItMyTurn) {
-                drawX(466, 0);
-                game[0][2] = 'X';
-                setTimeout(() => {
-                    cpuMoove(game, mooveCount, checkProgress);
-                    finishRound(checkProgress, game)
-                }, 1000);
+                if (game[0][2] === '') {
+                    drawX(466, 0);
+                    game[0][2] = 'X';
+                    setTimeout(() => {
+                        cpuMoove(game, mooveCount, checkProgress);
+                        finishRound(checkProgress, game)
+                    }, 1000);
+                }
             }
 
         } else if (x > 0 && x < 233 && y > 233 && y < 466) {
             if (isItMyTurn) {
-                drawX(0, 233);
-                game[1][0] = 'X';
-                setTimeout(() => {
-                    cpuMoove(game, mooveCount, checkProgress);
-                    finishRound(checkProgress, game)
-                }, 1000);
+                if (game[1][0] === '') {
+                    drawX(0, 233);
+                    game[1][0] = 'X';
+                    setTimeout(() => {
+                        cpuMoove(game, mooveCount, checkProgress);
+                        finishRound(checkProgress, game)
+                    }, 1000);
+                }
             }
 
         } else if (x > 0 && x < 233 && y > 466 && y < 699) {
             if (isItMyTurn) {
-                drawX(0, 466);
-                game[2][0] = 'X';
-                setTimeout(() => {
-                    cpuMoove(game, mooveCount, checkProgress);
-                    finishRound(checkProgress, game)
-                }, 1000);
+                if (game[2][0] === '') {
+                    drawX(0, 466);
+                    game[2][0] = 'X';
+                    setTimeout(() => {
+                        cpuMoove(game, mooveCount, checkProgress);
+                        finishRound(checkProgress, game)
+                    }, 1000);
+                }
             }
 
         } else if (x > 466 && x < 699 && y > 233 && y < 466) {
             if (isItMyTurn) {
-                drawX(466, 233);
-                game[1][2] = 'X';
-                setTimeout(() => {
-                    cpuMoove(game, mooveCount, checkProgress);
-                    finishRound(checkProgress, game)
-                }, 1000);
+                if (game[1][2] === '') {
+                    drawX(466, 233);
+                    game[1][2] = 'X';
+                    setTimeout(() => {
+                        cpuMoove(game, mooveCount, checkProgress);
+                        finishRound(checkProgress, game)
+                    }, 1000);
+                }
             }
 
         } else if (x > 233 && x < 466 && y > 466 && y < 699) {
             if (isItMyTurn) {
-                drawX(233, 466);
-                game[2][1] = 'X';
-                setTimeout(() => {
-                    cpuMoove(game, mooveCount, checkProgress);
-                    finishRound(checkProgress, game)
-                }, 1000);
+                if (game[2][1] === '') {
+                    drawX(233, 466);
+                    game[2][1] = 'X';
+                    setTimeout(() => {
+                        cpuMoove(game, mooveCount, checkProgress);
+                        finishRound(checkProgress, game)
+                    }, 1000);
+                }
             }
 
         } else if (x > 233 && x < 466 && y > 233 && y < 466) {
             if (isItMyTurn) {
-                drawX(233, 233);
-                game[1][1] = 'X';
-                setTimeout(() => {
-                    cpuMoove(game, mooveCount, checkProgress);
-                    finishRound(checkProgress, game)
-                }, 1000);
+                if (game[1][1] === '') {
+                    drawX(233, 233);
+                    game[1][1] = 'X';
+                    setTimeout(() => {
+                        cpuMoove(game, mooveCount, checkProgress);
+                        finishRound(checkProgress, game)
+                    }, 1000);
+                }
             }
 
         } else if (x > 466 && x < 699 && y > 466 && y < 699) {
             if (isItMyTurn) {
-                drawX(466, 466);
-                game[2][2] = 'X';
-                setTimeout(() => {
-                    cpuMoove(game, mooveCount, checkProgress);
-                    finishRound(checkProgress, game)
-                }, 1000);
+                if (game[2][0] === '') {
+                    drawX(466, 466);
+                    game[2][2] = 'X';
+                    setTimeout(() => {
+                        cpuMoove(game, mooveCount, checkProgress);
+                        finishRound(checkProgress, game)
+                    }, 1000);
+                }
             }
         }
 
@@ -258,6 +277,10 @@ window.addEventListener("load", () => {
                     break;
             }
         }
+    }
+
+    function checkSpace(currentGame) {
+
     }
 
 
