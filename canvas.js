@@ -28,6 +28,122 @@ window.addEventListener("load", () => {
 
     ctx.stroke();
 
+
+
+
+    function gameFlow(canvas, event, isItMyTurn, game, mooveCount) {
+        const rect = canvas.getBoundingClientRect()
+        const x = event.clientX - rect.left
+        const y = event.clientY - rect.top
+
+
+        if (x > 0 && x < 233 && y > 0 && y < 233) {
+            if (isItMyTurn) {
+                drawX(0, 0);
+                game[0][0] = 'X';
+                setTimeout(() => {
+                    cpuMoove(game, mooveCount, checkProgress);
+                    finishRound(checkProgress, game)
+                }, 1000);
+            }
+
+        } else if (x > 233 && x < 466 && y > 0 && y < 233) {
+            if (isItMyTurn) {
+                drawX(233, 0);
+                game[0][1] = 'X';
+                setTimeout(() => {
+                    cpuMoove(game, mooveCount, checkProgress);
+                    finishRound(checkProgress, game)
+                }, 1000);
+            }
+
+        } else if (x > 466 && x < 699 && y > 0 && y < 233) {
+            if (isItMyTurn) {
+                drawX(466, 0);
+                game[0][2] = 'X';
+                setTimeout(() => {
+                    cpuMoove(game, mooveCount, checkProgress);
+                    finishRound(checkProgress, game)
+                }, 1000);
+            }
+
+        } else if (x > 0 && x < 233 && y > 233 && y < 466) {
+            if (isItMyTurn) {
+                drawX(0, 233);
+                game[1][0] = 'X';
+                setTimeout(() => {
+                    cpuMoove(game, mooveCount, checkProgress);
+                    finishRound(checkProgress, game)
+                }, 1000);
+            }
+
+        } else if (x > 0 && x < 233 && y > 466 && y < 699) {
+            if (isItMyTurn) {
+                drawX(0, 466);
+                game[2][0] = 'X';
+                setTimeout(() => {
+                    cpuMoove(game, mooveCount, checkProgress);
+                    finishRound(checkProgress, game)
+                }, 1000);
+            }
+
+        } else if (x > 466 && x < 699 && y > 233 && y < 466) {
+            if (isItMyTurn) {
+                drawX(466, 233);
+                game[1][2] = 'X';
+                setTimeout(() => {
+                    cpuMoove(game, mooveCount, checkProgress);
+                    finishRound(checkProgress, game)
+                }, 1000);
+            }
+
+        } else if (x > 233 && x < 466 && y > 466 && y < 699) {
+            if (isItMyTurn) {
+                drawX(233, 466);
+                game[2][1] = 'X';
+                setTimeout(() => {
+                    cpuMoove(game, mooveCount, checkProgress);
+                    finishRound(checkProgress, game)
+                }, 1000);
+            }
+
+        } else if (x > 233 && x < 466 && y > 233 && y < 466) {
+            if (isItMyTurn) {
+                drawX(233, 233);
+                game[1][1] = 'X';
+                setTimeout(() => {
+                    cpuMoove(game, mooveCount, checkProgress);
+                    finishRound(checkProgress, game)
+                }, 1000);
+            }
+
+        } else if (x > 466 && x < 699 && y > 466 && y < 699) {
+            if (isItMyTurn) {
+                drawX(466, 466);
+                game[2][2] = 'X';
+                setTimeout(() => {
+                    cpuMoove(game, mooveCount, checkProgress);
+                    finishRound(checkProgress, game)
+                }, 1000);
+            }
+        }
+
+
+
+
+    }
+
+    function finishRound(checkProgress, game) {
+        if (checkProgress(game)[0]) {
+            canvas.removeEventListener('click', handler);
+            if (checkProgress(game)[1]) {
+                document.getElementById("result").innerText = "winner";
+            } else if (!checkProgress(game)[1]) {
+                document.getElementById("result").innerText = "looser";
+            }
+        }
+    }
+
     function drawX(x, y) {
         ctx.strokeStyle = '#545454';
         ctx.beginPath();
@@ -50,100 +166,16 @@ window.addEventListener("load", () => {
         mooveCount++;
     }
 
-
-    function gameFlow(canvas, event, isItMyTurn, game, mooveCount) {
-        const rect = canvas.getBoundingClientRect()
-        const x = event.clientX - rect.left
-        const y = event.clientY - rect.top
-
-
-        if (x > 0 && x < 233 && y > 0 && y < 233) {
-            if (isItMyTurn) {
-                drawX(0, 0);
-                game[0][0] = 'X';
-                cpuMoove(game, mooveCount);
-            }
-
-        } else if (x > 233 && x < 466 && y > 0 && y < 233) {
-            if (isItMyTurn) {
-                drawX(233, 0);
-                game[0][1] = 'X';
-                cpuMoove(game, mooveCount);
-            }
-
-        } else if (x > 466 && x < 699 && y > 0 && y < 233) {
-            if (isItMyTurn) {
-                drawX(466, 0);
-                game[0][2] = 'X';
-                cpuMoove(game, mooveCount);
-            }
-
-        } else if (x > 0 && x < 233 && y > 233 && y < 466) {
-            if (isItMyTurn) {
-                drawX(0, 233);
-                game[1][0] = 'X';
-                cpuMoove(game, mooveCount);
-            }
-
-        } else if (x > 0 && x < 233 && y > 466 && y < 699) {
-            if (isItMyTurn) {
-                drawX(0, 466);
-                game[2][0] = 'X';
-                cpuMoove(game, mooveCount);
-            }
-
-        } else if (x > 466 && x < 699 && y > 233 && y < 466) {
-            if (isItMyTurn) {
-                drawX(466, 233);
-                game[1][2] = 'X';
-                cpuMoove(game, mooveCount);
-            }
-
-        } else if (x > 233 && x < 466 && y > 466 && y < 699) {
-            if (isItMyTurn) {
-                drawX(233, 466);
-                game[2][1] = 'X';
-                cpuMoove(game, mooveCount);
-            }
-
-        } else if (x > 233 && x < 466 && y > 233 && y < 466) {
-            if (isItMyTurn) {
-                drawX(233, 233);
-                game[1][1] = 'X';
-                cpuMoove(game, mooveCount);
-            }
-
-        } else if (x > 466 && x < 699 && y > 466 && y < 699) {
-            if (isItMyTurn) {
-                drawX(466, 466);
-                game[2][2] = 'X';
-                cpuMoove(game, mooveCount);
-            }
-        }
-        if (checkProgress(game)) {
-            if (checkProgress(game)[1] === true) {
-                document.getElementById("result").innerText = "winner";
-            } else {
-                document.getElementById("result").innerText = "looser";
-
-            }
-            canvas.removeEventListener('click', handler);
-
-        }
-    }
-
-
-
     function checkProgress(game) {
         let isItOver = false;
         let didIWin = false;
         for (const row of game) {
+            console.log(row);
             if (row[0] === row[1] && row[1] === row[2] && row[0]) {
                 isItOver = true;
                 if (row[0] === 'X') {
                     didIWin = true;
                     return [isItOver, didIWin];
-
                 }
                 return [isItOver, didIWin];
             }
@@ -168,30 +200,24 @@ window.addEventListener("load", () => {
             }
             return [isItOver, didIWin];
         }
+        return [isItOver, didIWin];
     }
 
     function randomNumber() {
         return Math.floor((Math.random() * 3));
     }
 
-    function cpuMoove(currentGame, mooveCount) {
-
-
-        console.log(mooveCount);
-        console.log(currentGame);
+    function cpuMoove(currentGame, mooveCount, checkProgress) {
+        console.log(checkProgress(currentGame));
+        if (checkProgress(currentGame)[0]) {
+            return;
+        }
 
         do {
             indexOfRow = randomNumber();
             indexOfCCol = randomNumber();
-            console.log(`ciklusban vagyok: ${indexOfRow} ${indexOfCCol} ${currentGame[indexOfRow][indexOfCCol]}`);
-            console.log(currentGame);
         } while (currentGame[indexOfRow][indexOfCCol] !== "" && mooveCount < 8);
 
-
-
-        console.log(`Ezzel jöttem ki ${indexOfRow} ${indexOfCCol} ${currentGame[indexOfRow][indexOfCCol]}`);
-        console.log(currentGame);
-        console.log(checkProgress(currentGame));
         if (currentGame[indexOfRow][indexOfCCol] === "") {
             switch (true) {
                 case (indexOfRow === 0 && indexOfCCol === 0):
@@ -230,14 +256,9 @@ window.addEventListener("load", () => {
                     drawO(466, 466);
                     currentGame[2][2] = 'O';
                     break;
-
-
             }
         }
-
     }
-
-
 
 
     const handler = e => gameFlow(canvas, e, isItMyTurn, game, mooveCount);
