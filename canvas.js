@@ -1,9 +1,9 @@
-window.addEventListener("load", () => {
+window.addEventListener("load", (game) => {
     const canvas = document.querySelector('#canvas');
     const ctx = canvas.getContext("2d");
     let isItMyTurn = true;
     let mooveCount = 0;
-    let game = [["", "", ""], ["", "", ""], ["", "", ""]];
+    game = [["", "", ""], ["", "", ""], ["", "", ""]];
 
     //Resizing
     canvas.height = 699;
@@ -189,7 +189,6 @@ window.addEventListener("load", () => {
         let isItOver = false;
         let didIWin = false;
         for (const row of game) {
-            console.log(row);
             if (row[0] === row[1] && row[1] === row[2] && row[0]) {
                 isItOver = true;
                 if (row[0] === 'X') {
@@ -226,60 +225,47 @@ window.addEventListener("load", () => {
         return Math.floor((Math.random() * 3));
     }
 
+    function transformIndexToCoordinate(indexOfRow, indexOfCCol) {
+        switch (true) {
+            case (indexOfRow === 0 && indexOfCCol === 0):
+                return [0, 0];
+            case (indexOfRow === 0 && indexOfCCol === 1):
+                return [233, 0];
+            case (indexOfRow === 0 && indexOfCCol === 2):
+                return [466, 0];
+            case (indexOfRow === 1 && indexOfCCol === 0):
+                return [0, 233];
+            case (indexOfRow === 1 && indexOfCCol === 1):
+                return [233, 233];
+            case (indexOfRow === 1 && indexOfCCol === 2):
+                return [466, 233];
+            case (indexOfRow === 2 && indexOfCCol === 0):
+                return [0, 466];
+            case (indexOfRow === 2 && indexOfCCol === 1):
+                return [233, 466];
+            case (indexOfRow === 2 && indexOfCCol === 2):
+                return [466, 466];
+        }
+    }
+
     function cpuMoove(currentGame, mooveCount, checkProgress) {
-        console.log(checkProgress(currentGame));
         if (checkProgress(currentGame)[0]) {
             return;
         }
+
 
         do {
             indexOfRow = randomNumber();
             indexOfCCol = randomNumber();
         } while (currentGame[indexOfRow][indexOfCCol] !== "" && mooveCount < 8);
 
-        if (currentGame[indexOfRow][indexOfCCol] === "") {
-            switch (true) {
-                case (indexOfRow === 0 && indexOfCCol === 0):
-                    drawO(0, 0);
-                    currentGame[0][0] = 'O';
-                    break;
-                case (indexOfRow === 0 && indexOfCCol === 1):
-                    drawO(233, 0);
-                    currentGame[0][1] = 'O';
-                    break;
-                case (indexOfRow === 0 && indexOfCCol === 2):
-                    drawO(466, 0);
-                    currentGame[0][2] = 'O';
-                    break;
-                case (indexOfRow === 1 && indexOfCCol === 0):
-                    drawO(0, 233);
-                    currentGame[1][0] = 'O';
-                    break;
-                case (indexOfRow === 1 && indexOfCCol === 1):
-                    drawO(233, 233);
-                    currentGame[1][1] = 'O';
-                    break;
-                case (indexOfRow === 1 && indexOfCCol === 2):
-                    drawO(466, 233);
-                    currentGame[1][2] = 'O';
-                    break;
-                case (indexOfRow === 2 && indexOfCCol === 0):
-                    drawO(0, 466);
-                    currentGame[2][0] = 'O';
-                    break;
-                case (indexOfRow === 2 && indexOfCCol === 1):
-                    drawO(233, 466);
-                    currentGame[2][1] = 'O';
-                    break;
-                case (indexOfRow === 2 && indexOfCCol === 2):
-                    drawO(466, 466);
-                    currentGame[2][2] = 'O';
-                    break;
-            }
-        }
-    }
+        let coordinates = transformIndexToCoordinate(indexOfRow, indexOfCCol);
+        drawO(...coordinates);
+        currentGame[indexOfRow][indexOfCCol] = 'O';
 
-    function checkSpace(currentGame) {
+
+
+
 
     }
 
@@ -287,5 +273,4 @@ window.addEventListener("load", () => {
     const handler = e => gameFlow(canvas, e, isItMyTurn, game, mooveCount);
 
     canvas.addEventListener('click', handler);
-
 });
