@@ -2,154 +2,83 @@ window.addEventListener("load", (game) => {
     const canvas = document.querySelector('#canvas');
     const ctx = canvas.getContext("2d");
     let isItMyTurn = true;
-    let mooveCount = 0;
     game = [["", "", ""], ["", "", ""], ["", "", ""]];
 
-    //Resizing
-    canvas.height = 699;
-    canvas.width = 699;
-
-
+    const clickableMapSide = window.innerHeight * 0.7 - 150;
+    canvas.height = clickableMapSide;
+    canvas.width = clickableMapSide;
     ctx.strokeStyle = '#0DA192';
     ctx.lineWidth = 15;
+    drawHorizontalLine();
+    drawVerticalLine();
 
-
-
-    ctx.beginPath();
-    ctx.moveTo(233, 20);
-    ctx.lineTo(233, 679);
-    ctx.moveTo(466, 20);
-    ctx.lineTo(466, 679);
-    ctx.moveTo(20, 233);
-    ctx.lineTo(679, 233);
-    ctx.moveTo(20, 466);
-    ctx.lineTo(679, 466);
-    ctx.closePath();
-
-    ctx.stroke();
-
-
-
-
-    function gameFlow(canvas, event, isItMyTurn, game, mooveCount) {
+    function gameFlow(canvas, event, isItMyTurn, game) {
         const rect = canvas.getBoundingClientRect()
         const x = event.clientX - rect.left
         const y = event.clientY - rect.top
-
-
-        if (x > 0 && x < 233 && y > 0 && y < 233) {
-            if (isItMyTurn) {
-                if (game[0][0] === '') {
-                    drawX(0, 0);
-                    game[0][0] = 'X';
-                    setTimeout(() => {
-                        cpuMoove(game, mooveCount, checkProgress);
-                        finishRound(checkProgress, game)
-                    }, 1000);
-                }
-
-            }
-
-        } else if (x > 233 && x < 466 && y > 0 && y < 233) {
-            if (isItMyTurn) {
-                if (game[0][1] === '') {
-                    drawX(233, 0);
-                    game[0][1] = 'X';
-                    setTimeout(() => {
-                        cpuMoove(game, mooveCount, checkProgress);
-                        finishRound(checkProgress, game)
-                    }, 1000);
-                }
-            }
-
-        } else if (x > 466 && x < 699 && y > 0 && y < 233) {
-            if (isItMyTurn) {
-                if (game[0][2] === '') {
-                    drawX(466, 0);
-                    game[0][2] = 'X';
-                    setTimeout(() => {
-                        cpuMoove(game, mooveCount, checkProgress);
-                        finishRound(checkProgress, game)
-                    }, 1000);
-                }
-            }
-
-        } else if (x > 0 && x < 233 && y > 233 && y < 466) {
-            if (isItMyTurn) {
-                if (game[1][0] === '') {
-                    drawX(0, 233);
-                    game[1][0] = 'X';
-                    setTimeout(() => {
-                        cpuMoove(game, mooveCount, checkProgress);
-                        finishRound(checkProgress, game)
-                    }, 1000);
-                }
-            }
-
-        } else if (x > 0 && x < 233 && y > 466 && y < 699) {
-            if (isItMyTurn) {
-                if (game[2][0] === '') {
-                    drawX(0, 466);
-                    game[2][0] = 'X';
-                    setTimeout(() => {
-                        cpuMoove(game, mooveCount, checkProgress);
-                        finishRound(checkProgress, game)
-                    }, 1000);
-                }
-            }
-
-        } else if (x > 466 && x < 699 && y > 233 && y < 466) {
-            if (isItMyTurn) {
-                if (game[1][2] === '') {
-                    drawX(466, 233);
-                    game[1][2] = 'X';
-                    setTimeout(() => {
-                        cpuMoove(game, mooveCount, checkProgress);
-                        finishRound(checkProgress, game)
-                    }, 1000);
-                }
-            }
-
-        } else if (x > 233 && x < 466 && y > 466 && y < 699) {
-            if (isItMyTurn) {
-                if (game[2][1] === '') {
-                    drawX(233, 466);
-                    game[2][1] = 'X';
-                    setTimeout(() => {
-                        cpuMoove(game, mooveCount, checkProgress);
-                        finishRound(checkProgress, game)
-                    }, 1000);
-                }
-            }
-
-        } else if (x > 233 && x < 466 && y > 233 && y < 466) {
-            if (isItMyTurn) {
-                if (game[1][1] === '') {
-                    drawX(233, 233);
-                    game[1][1] = 'X';
-                    setTimeout(() => {
-                        cpuMoove(game, mooveCount, checkProgress);
-                        finishRound(checkProgress, game)
-                    }, 1000);
-                }
-            }
-
-        } else if (x > 466 && x < 699 && y > 466 && y < 699) {
-            if (isItMyTurn) {
-                if (game[2][0] === '') {
-                    drawX(466, 466);
-                    game[2][2] = 'X';
-                    setTimeout(() => {
-                        cpuMoove(game, mooveCount, checkProgress);
-                        finishRound(checkProgress, game)
-                    }, 1000);
-                }
-            }
+        switch (isItMyTurn) {
+            case (x > 0 && x < clickableMapSide / 3 && y > 0 && y < clickableMapSide / 3):
+                playerMoove(0, 0);
+                break;
+            case (x > clickableMapSide / 3 && x < clickableMapSide / 3 * 2 && y > 0 && y < clickableMapSide / 3):
+                playerMoove(0, 1);
+                break;
+            case (x > clickableMapSide / 3 * 2 && x < clickableMapSide && y > 0 && y < clickableMapSide / 3):
+                playerMoove(0, 2);
+                break;
+            case (x > 0 && x < clickableMapSide / 3 && y > clickableMapSide / 3 && y < clickableMapSide / 3 * 2):
+                playerMoove(1, 0);
+                break;
+            case (x > 0 && x < clickableMapSide / 3 && y > clickableMapSide / 3 * 2 && y < clickableMapSide):
+                playerMoove(2, 0);
+                break;
+            case (x > clickableMapSide / 3 * 2 && x < clickableMapSide && y > clickableMapSide / 3 && y < clickableMapSide / 3 * 2):
+                playerMoove(1, 2);
+                break;
+            case (x > clickableMapSide / 3 && x < clickableMapSide / 3 * 2 && y > clickableMapSide / 3 * 2 && y < clickableMapSide):
+                playerMoove(2, 1);
+                break;
+            case (x > clickableMapSide / 3 && x < clickableMapSide / 3 * 2 && y > clickableMapSide / 3 && y < clickableMapSide / 3 * 2):
+                playerMoove(1, 1);
+                break;
+            case (x > clickableMapSide / 3 * 2 && x < clickableMapSide && y > clickableMapSide / 3 * 2 && y < clickableMapSide):
+                playerMoove(2, 2);
         }
+    }
 
+    function drawHorizontalLine() {
+        ctx.beginPath();
+        ctx.moveTo(clickableMapSide / 3, 20);
+        ctx.lineTo(clickableMapSide / 3, clickableMapSide - 20);
+        ctx.moveTo(clickableMapSide / 3 * 2, 20);
+        ctx.lineTo(clickableMapSide / 3 * 2, clickableMapSide - 20);
+        ctx.closePath();
+        ctx.stroke();
+    }
 
+    function drawVerticalLine() {
+        ctx.beginPath();
+        ctx.moveTo(20, clickableMapSide / 3);
+        ctx.lineTo(clickableMapSide - 20, clickableMapSide / 3);
+        ctx.moveTo(20, clickableMapSide / 3 * 2);
+        ctx.lineTo(clickableMapSide - 20, clickableMapSide / 3 * 2);
+        ctx.closePath();
+        ctx.stroke();
+    }
 
+    function trigerCPUMoove() {
+        setTimeout(() => {
+            cpuMoove(game, checkProgress);
+            finishRound(checkProgress, game)
+        }, 1000);
+    }
 
+    function playerMoove(rowIndex, colIndex) {
+        if (game[rowIndex][colIndex] === '') {
+            let coordinates = transformIndexToCoordinate(rowIndex, colIndex);
+            drawX(rowIndex, colIndex, ...coordinates);
+            trigerCPUMoove();
+        }
     }
 
     function finishRound(checkProgress, game) {
@@ -163,26 +92,25 @@ window.addEventListener("load", (game) => {
         }
     }
 
-    function drawX(x, y) {
+    function drawX(rowIndex, colIndex, x, y,) {
         ctx.strokeStyle = '#545454';
         ctx.beginPath();
-        ctx.moveTo(x + 40, y + 40);
-        ctx.lineTo(x + 193, y + 193);
-        ctx.moveTo(x + 193, y + 40);
-        ctx.lineTo(x + 40, y + 193);
+        ctx.moveTo(x + clickableMapSide / 17.575, y + clickableMapSide / 17.575);
+        ctx.lineTo(x + clickableMapSide / 3.7217, y + clickableMapSide / 3.7217);
+        ctx.moveTo(x + clickableMapSide / 3.7217, y + clickableMapSide / 17.575);
+        ctx.lineTo(x + clickableMapSide / 17.575, y + clickableMapSide / 3.7217);
         ctx.stroke();
         ctx.closePath();
         isItMyTurn = false;
-        mooveCount++;
+        game[rowIndex][colIndex] = 'X';
     }
 
     function drawO(x, y) {
         ctx.strokeStyle = 'white';
         ctx.beginPath();
-        ctx.arc(x + 116.5, y + 116.5, 70, 0, 2 * Math.PI);
+        ctx.arc(x + clickableMapSide / 6, y + clickableMapSide / 6, clickableMapSide / 10, 0, 2 * Math.PI);
         ctx.stroke();
         isItMyTurn = true;
-        mooveCount++;
     }
 
     function checkProgress(game) {
@@ -230,25 +158,25 @@ window.addEventListener("load", (game) => {
             case (indexOfRow === 0 && indexOfCCol === 0):
                 return [0, 0];
             case (indexOfRow === 0 && indexOfCCol === 1):
-                return [233, 0];
+                return [clickableMapSide / 3, 0];
             case (indexOfRow === 0 && indexOfCCol === 2):
-                return [466, 0];
+                return [clickableMapSide / 3 * 2, 0];
             case (indexOfRow === 1 && indexOfCCol === 0):
-                return [0, 233];
+                return [0, clickableMapSide / 3];
             case (indexOfRow === 1 && indexOfCCol === 1):
-                return [233, 233];
+                return [clickableMapSide / 3, clickableMapSide / 3];
             case (indexOfRow === 1 && indexOfCCol === 2):
-                return [466, 233];
+                return [clickableMapSide / 3 * 2, clickableMapSide / 3];
             case (indexOfRow === 2 && indexOfCCol === 0):
-                return [0, 466];
+                return [0, clickableMapSide / 3 * 2];
             case (indexOfRow === 2 && indexOfCCol === 1):
-                return [233, 466];
+                return [clickableMapSide / 3, clickableMapSide / 3 * 2];
             case (indexOfRow === 2 && indexOfCCol === 2):
-                return [466, 466];
+                return [clickableMapSide / 3 * 2, clickableMapSide / 3 * 2];
         }
     }
 
-    function cpuMoove(currentGame, mooveCount, checkProgress) {
+    function cpuMoove(currentGame, checkProgress) {
         if (checkProgress(currentGame)[0]) {
             return;
         }
@@ -257,20 +185,28 @@ window.addEventListener("load", (game) => {
         do {
             indexOfRow = randomNumber();
             indexOfCCol = randomNumber();
-        } while (currentGame[indexOfRow][indexOfCCol] !== "" && mooveCount < 8);
+        } while (currentGame[indexOfRow][indexOfCCol] !== "");
+
+
+        for (let i = 0; i < 3; i++) {
+            let line = currentGame[i].filter(cell => cell === 'X');
+            if (JSON.stringify(line) === JSON.stringify(["X", "X"])) {
+                for (let j = 0; j < 3; j++) {
+                    if (currentGame[i][j] === '') {
+                        indexOfRow = i;
+                        indexOfCCol = j;
+                    }
+                }
+            }
+        }
 
         let coordinates = transformIndexToCoordinate(indexOfRow, indexOfCCol);
         drawO(...coordinates);
         currentGame[indexOfRow][indexOfCCol] = 'O';
-
-
-
-
-
     }
 
 
-    const handler = e => gameFlow(canvas, e, isItMyTurn, game, mooveCount);
+    const handler = e => gameFlow(canvas, e, isItMyTurn, game);
 
     canvas.addEventListener('click', handler);
 });
