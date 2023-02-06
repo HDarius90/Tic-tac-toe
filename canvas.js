@@ -12,7 +12,7 @@ window.addEventListener("load", (game) => {
     drawHorizontalLine();
     drawVerticalLine();
 
-    function gameFlow(canvas, event, isItMyTurn, game) {
+    function clickHandlet(canvas, event, isItMyTurn) {
         const rect = canvas.getBoundingClientRect()
         const x = event.clientX - rect.left
         const y = event.clientY - rect.top
@@ -116,6 +116,8 @@ window.addEventListener("load", (game) => {
     function checkProgress(game) {
         let isItOver = false;
         let didIWin = false;
+
+        //check rows
         for (const row of game) {
             if (row[0] === row[1] && row[1] === row[2] && row[0]) {
                 isItOver = true;
@@ -127,6 +129,7 @@ window.addEventListener("load", (game) => {
             }
         }
 
+        //check cols
         for (let i = 0; i < 3; i++) {
             if (game[0][i] === game[1][i] && game[1][i] === game[2][i] && game[0][i]) {
                 isItOver = true;
@@ -138,6 +141,7 @@ window.addEventListener("load", (game) => {
             }
         }
 
+        //check crosses
         if (((game[0][0] === game[1][1] && game[1][1] === game[2][2]) || (game[0][2] === game[1][1] && game[1][1] === game[2][0])) && game[1][1]) {
             isItOver = true;
             if (game[1][1] === 'X') {
@@ -148,6 +152,8 @@ window.addEventListener("load", (game) => {
         }
         return [isItOver, didIWin];
     }
+
+
 
     function randomNumber() {
         return Math.floor((Math.random() * 3));
@@ -181,12 +187,16 @@ window.addEventListener("load", (game) => {
             return;
         }
 
+        //chechk if there is free space
+        let allMooves = [...game[0], ...game[1], ...game[2]];
+        if (!allMooves.includes('')) {
+            return;
+        }
 
         do {
             indexOfRow = randomNumber();
             indexOfCCol = randomNumber();
         } while (currentGame[indexOfRow][indexOfCCol] !== "");
-
 
         for (let i = 0; i < 3; i++) {
             let line = currentGame[i].filter(cell => cell === 'X');
@@ -199,14 +209,12 @@ window.addEventListener("load", (game) => {
                 }
             }
         }
-
         let coordinates = transformIndexToCoordinate(indexOfRow, indexOfCCol);
         drawO(...coordinates);
         currentGame[indexOfRow][indexOfCCol] = 'O';
     }
 
-
-    const handler = e => gameFlow(canvas, e, isItMyTurn, game);
+    const handler = e => clickHandlet(canvas, e, isItMyTurn, game);
 
     canvas.addEventListener('click', handler);
 });
