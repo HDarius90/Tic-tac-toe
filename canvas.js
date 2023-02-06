@@ -12,6 +12,74 @@ window.addEventListener("load", (game) => {
     drawHorizontalLine();
     drawVerticalLine();
 
+    function drawHorizontalLine() {
+        ctx.beginPath();
+        ctx.moveTo(clickableMapSide / 3, 20);
+        ctx.lineTo(clickableMapSide / 3, clickableMapSide - 20);
+        ctx.moveTo(clickableMapSide / 3 * 2, 20);
+        ctx.lineTo(clickableMapSide / 3 * 2, clickableMapSide - 20);
+        ctx.closePath();
+        ctx.stroke();
+    }
+
+    function drawVerticalLine() {
+        ctx.beginPath();
+        ctx.moveTo(20, clickableMapSide / 3);
+        ctx.lineTo(clickableMapSide - 20, clickableMapSide / 3);
+        ctx.moveTo(20, clickableMapSide / 3 * 2);
+        ctx.lineTo(clickableMapSide - 20, clickableMapSide / 3 * 2);
+        ctx.closePath();
+        ctx.stroke();
+    }
+
+    function drawX(rowIndex, colIndex, x, y,) {
+        ctx.strokeStyle = '#545454';
+        ctx.beginPath();
+        ctx.moveTo(x + clickableMapSide / 17.575, y + clickableMapSide / 17.575);
+        ctx.lineTo(x + clickableMapSide / 3.7217, y + clickableMapSide / 3.7217);
+        ctx.moveTo(x + clickableMapSide / 3.7217, y + clickableMapSide / 17.575);
+        ctx.lineTo(x + clickableMapSide / 17.575, y + clickableMapSide / 3.7217);
+        ctx.stroke();
+        ctx.closePath();
+        isItMyTurn = false;
+        game[rowIndex][colIndex] = 'X';
+    }
+
+    function drawO(x, y) {
+        ctx.strokeStyle = 'white';
+        ctx.beginPath();
+        ctx.arc(x + clickableMapSide / 6, y + clickableMapSide / 6, clickableMapSide / 10, 0, 2 * Math.PI);
+        ctx.stroke();
+        isItMyTurn = true;
+    }
+
+    function randomNumber() {
+        return Math.floor((Math.random() * 3));
+    }
+
+    function transformIndexToCoordinate(indexOfRow, indexOfCCol) {
+        switch (true) {
+            case (indexOfRow === 0 && indexOfCCol === 0):
+                return [0, 0];
+            case (indexOfRow === 0 && indexOfCCol === 1):
+                return [clickableMapSide / 3, 0];
+            case (indexOfRow === 0 && indexOfCCol === 2):
+                return [clickableMapSide / 3 * 2, 0];
+            case (indexOfRow === 1 && indexOfCCol === 0):
+                return [0, clickableMapSide / 3];
+            case (indexOfRow === 1 && indexOfCCol === 1):
+                return [clickableMapSide / 3, clickableMapSide / 3];
+            case (indexOfRow === 1 && indexOfCCol === 2):
+                return [clickableMapSide / 3 * 2, clickableMapSide / 3];
+            case (indexOfRow === 2 && indexOfCCol === 0):
+                return [0, clickableMapSide / 3 * 2];
+            case (indexOfRow === 2 && indexOfCCol === 1):
+                return [clickableMapSide / 3, clickableMapSide / 3 * 2];
+            case (indexOfRow === 2 && indexOfCCol === 2):
+                return [clickableMapSide / 3 * 2, clickableMapSide / 3 * 2];
+        }
+    }
+
     function clickHandlet(canvas, event, isItMyTurn) {
         const rect = canvas.getBoundingClientRect()
         const x = event.clientX - rect.left
@@ -46,24 +114,15 @@ window.addEventListener("load", (game) => {
         }
     }
 
-    function drawHorizontalLine() {
-        ctx.beginPath();
-        ctx.moveTo(clickableMapSide / 3, 20);
-        ctx.lineTo(clickableMapSide / 3, clickableMapSide - 20);
-        ctx.moveTo(clickableMapSide / 3 * 2, 20);
-        ctx.lineTo(clickableMapSide / 3 * 2, clickableMapSide - 20);
-        ctx.closePath();
-        ctx.stroke();
-    }
-
-    function drawVerticalLine() {
-        ctx.beginPath();
-        ctx.moveTo(20, clickableMapSide / 3);
-        ctx.lineTo(clickableMapSide - 20, clickableMapSide / 3);
-        ctx.moveTo(20, clickableMapSide / 3 * 2);
-        ctx.lineTo(clickableMapSide - 20, clickableMapSide / 3 * 2);
-        ctx.closePath();
-        ctx.stroke();
+    function finishRound(checkProgress, game) {
+        if (checkProgress(game)[0]) {
+            canvas.removeEventListener('click', handler);
+            if (checkProgress(game)[1]) {
+                document.getElementById("result").innerText = "winner";
+            } else if (!checkProgress(game)[1]) {
+                document.getElementById("result").innerText = "looser";
+            }
+        }
     }
 
     function trigerCPUMoove() {
@@ -79,38 +138,6 @@ window.addEventListener("load", (game) => {
             drawX(rowIndex, colIndex, ...coordinates);
             trigerCPUMoove();
         }
-    }
-
-    function finishRound(checkProgress, game) {
-        if (checkProgress(game)[0]) {
-            canvas.removeEventListener('click', handler);
-            if (checkProgress(game)[1]) {
-                document.getElementById("result").innerText = "winner";
-            } else if (!checkProgress(game)[1]) {
-                document.getElementById("result").innerText = "looser";
-            }
-        }
-    }
-
-    function drawX(rowIndex, colIndex, x, y,) {
-        ctx.strokeStyle = '#545454';
-        ctx.beginPath();
-        ctx.moveTo(x + clickableMapSide / 17.575, y + clickableMapSide / 17.575);
-        ctx.lineTo(x + clickableMapSide / 3.7217, y + clickableMapSide / 3.7217);
-        ctx.moveTo(x + clickableMapSide / 3.7217, y + clickableMapSide / 17.575);
-        ctx.lineTo(x + clickableMapSide / 17.575, y + clickableMapSide / 3.7217);
-        ctx.stroke();
-        ctx.closePath();
-        isItMyTurn = false;
-        game[rowIndex][colIndex] = 'X';
-    }
-
-    function drawO(x, y) {
-        ctx.strokeStyle = 'white';
-        ctx.beginPath();
-        ctx.arc(x + clickableMapSide / 6, y + clickableMapSide / 6, clickableMapSide / 10, 0, 2 * Math.PI);
-        ctx.stroke();
-        isItMyTurn = true;
     }
 
     function checkProgress(game) {
@@ -153,42 +180,13 @@ window.addEventListener("load", (game) => {
         return [isItOver, didIWin];
     }
 
-
-
-    function randomNumber() {
-        return Math.floor((Math.random() * 3));
-    }
-
-    function transformIndexToCoordinate(indexOfRow, indexOfCCol) {
-        switch (true) {
-            case (indexOfRow === 0 && indexOfCCol === 0):
-                return [0, 0];
-            case (indexOfRow === 0 && indexOfCCol === 1):
-                return [clickableMapSide / 3, 0];
-            case (indexOfRow === 0 && indexOfCCol === 2):
-                return [clickableMapSide / 3 * 2, 0];
-            case (indexOfRow === 1 && indexOfCCol === 0):
-                return [0, clickableMapSide / 3];
-            case (indexOfRow === 1 && indexOfCCol === 1):
-                return [clickableMapSide / 3, clickableMapSide / 3];
-            case (indexOfRow === 1 && indexOfCCol === 2):
-                return [clickableMapSide / 3 * 2, clickableMapSide / 3];
-            case (indexOfRow === 2 && indexOfCCol === 0):
-                return [0, clickableMapSide / 3 * 2];
-            case (indexOfRow === 2 && indexOfCCol === 1):
-                return [clickableMapSide / 3, clickableMapSide / 3 * 2];
-            case (indexOfRow === 2 && indexOfCCol === 2):
-                return [clickableMapSide / 3 * 2, clickableMapSide / 3 * 2];
-        }
-    }
-
     function cpuMoove(currentGame, checkProgress) {
         if (checkProgress(currentGame)[0]) {
             return;
         }
 
         //chechk if there is free space
-        let allMooves = [...game[0], ...game[1], ...game[2]];
+        let allMooves = [...currentGame[0], ...currentGame[1], ...currentGame[2]];
         if (!allMooves.includes('')) {
             return;
         }
@@ -198,9 +196,12 @@ window.addEventListener("load", (game) => {
             indexOfCCol = randomNumber();
         } while (currentGame[indexOfRow][indexOfCCol] !== "");
 
+
+
+        
         for (let i = 0; i < 3; i++) {
-            let line = currentGame[i].filter(cell => cell === 'X');
-            if (JSON.stringify(line) === JSON.stringify(["X", "X"])) {
+            let lineOfX = currentGame[i].filter(cell => cell === 'X');
+            if (JSON.stringify(lineOfX) === JSON.stringify(["X", "X"])) {
                 for (let j = 0; j < 3; j++) {
                     if (currentGame[i][j] === '') {
                         indexOfRow = i;
@@ -213,6 +214,8 @@ window.addEventListener("load", (game) => {
         drawO(...coordinates);
         currentGame[indexOfRow][indexOfCCol] = 'O';
     }
+
+
 
     const handler = e => clickHandlet(canvas, e, isItMyTurn, game);
 
