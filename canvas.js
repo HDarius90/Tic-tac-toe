@@ -80,37 +80,34 @@ window.addEventListener("load", (game) => {
         }
     }
 
+    function gameFlow(canvas, event, isItMyTurn) {
+        let clickIndex = clickHandlet(canvas, event, isItMyTurn);
+        playerMoove(...clickIndex);
+    }
+
     function clickHandlet(canvas, event, isItMyTurn) {
         const rect = canvas.getBoundingClientRect()
         const x = event.clientX - rect.left
         const y = event.clientY - rect.top
         switch (isItMyTurn) {
             case (x > 0 && x < clickableMapSide / 3 && y > 0 && y < clickableMapSide / 3):
-                playerMoove(0, 0);
-                break;
+                return[0, 0];
             case (x > clickableMapSide / 3 && x < clickableMapSide / 3 * 2 && y > 0 && y < clickableMapSide / 3):
-                playerMoove(0, 1);
-                break;
+                return[0, 1];
             case (x > clickableMapSide / 3 * 2 && x < clickableMapSide && y > 0 && y < clickableMapSide / 3):
-                playerMoove(0, 2);
-                break;
+                return[0, 2];
             case (x > 0 && x < clickableMapSide / 3 && y > clickableMapSide / 3 && y < clickableMapSide / 3 * 2):
-                playerMoove(1, 0);
-                break;
+                return[1, 0];
             case (x > 0 && x < clickableMapSide / 3 && y > clickableMapSide / 3 * 2 && y < clickableMapSide):
-                playerMoove(2, 0);
-                break;
+                return[2, 0];
             case (x > clickableMapSide / 3 * 2 && x < clickableMapSide && y > clickableMapSide / 3 && y < clickableMapSide / 3 * 2):
-                playerMoove(1, 2);
-                break;
+                return[1, 2];
             case (x > clickableMapSide / 3 && x < clickableMapSide / 3 * 2 && y > clickableMapSide / 3 * 2 && y < clickableMapSide):
-                playerMoove(2, 1);
-                break;
+                return[2, 1];
             case (x > clickableMapSide / 3 && x < clickableMapSide / 3 * 2 && y > clickableMapSide / 3 && y < clickableMapSide / 3 * 2):
-                playerMoove(1, 1);
-                break;
+                return[1, 1];
             case (x > clickableMapSide / 3 * 2 && x < clickableMapSide && y > clickableMapSide / 3 * 2 && y < clickableMapSide):
-                playerMoove(2, 2);
+                return[2, 2];
         }
     }
 
@@ -220,14 +217,11 @@ window.addEventListener("load", (game) => {
         currentGame[indexOfRow][indexOfCCol] = 'O';
     }
 
-    function testCPUMoove(params) {
-
-
-    }
 
 
 
-    const handler = e => clickHandlet(canvas, e, isItMyTurn, game);
+
+    const handler = e => gameFlow(canvas, e, isItMyTurn);
 
     canvas.addEventListener('click', handler);
 });
