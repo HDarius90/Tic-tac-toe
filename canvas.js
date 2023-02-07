@@ -41,7 +41,6 @@ window.addEventListener("load", (game) => {
         ctx.lineTo(x + clickableMapSide / 17.575, y + clickableMapSide / 3.7217);
         ctx.stroke();
         ctx.closePath();
-        isItMyTurn = false;
         game[rowIndex][colIndex] = 'X';
     }
 
@@ -50,7 +49,6 @@ window.addEventListener("load", (game) => {
         ctx.beginPath();
         ctx.arc(x + clickableMapSide / 6, y + clickableMapSide / 6, clickableMapSide / 10, 0, 2 * Math.PI);
         ctx.stroke();
-        isItMyTurn = true;
     }
 
     function randomNumber() {
@@ -106,11 +104,6 @@ window.addEventListener("load", (game) => {
         }
     }
 
-    function gameFlow(canvas, event, ) {
-        let clickIndex = clickHandler(canvas, event, );
-        playerMoove(...clickIndex);
-    }
-
     function finishGame() {
         if (checkProgress(game)[0]) {
             canvas.removeEventListener('click', handler);
@@ -126,7 +119,6 @@ window.addEventListener("load", (game) => {
         setTimeout(() => {
             cpuMoove();
             finishGame();
-
         }, 1000);
     }
 
@@ -134,7 +126,7 @@ window.addEventListener("load", (game) => {
         if (game[rowIndex][colIndex] === '') {
             let coordinates = transformIndexToCoordinate(rowIndex, colIndex);
             drawX(rowIndex, colIndex, ...coordinates);
-            trigerCPUMoove();
+            isItMyTurn = false;
         }
     }
 
@@ -211,13 +203,24 @@ window.addEventListener("load", (game) => {
         let coordinates = transformIndexToCoordinate(indexOfRow, indexOfCCol);
         drawO(...coordinates);
         game[indexOfRow][indexOfCCol] = 'O';
+        isItMyTurn = true;
+    }
+
+    function gameFlow(canvas, event) {
+        let testmode = document.getElementById('testmode').checked;
+        if(isItMyTurn){
+            let clickIndex = clickHandler(canvas, event);
+            playerMoove(...clickIndex);
+        }
+        if(!testmode){
+            trigerCPUMoove();         
+        }       
     }
 
 
 
 
-
-    const handler = e => gameFlow(canvas, e, );
+    const handler = e => gameFlow(canvas, e);
 
     canvas.addEventListener('click', handler);
 });
