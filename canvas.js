@@ -80,38 +80,38 @@ window.addEventListener("load", (game) => {
         }
     }
 
-    function gameFlow(canvas, event, isItMyTurn) {
-        let clickIndex = clickHandlet(canvas, event, isItMyTurn);
-        playerMoove(...clickIndex);
-    }
-
-    function clickHandlet(canvas, event, isItMyTurn) {
+    function clickHandler(canvas, event) {
         const rect = canvas.getBoundingClientRect()
         const x = event.clientX - rect.left
         const y = event.clientY - rect.top
-        switch (isItMyTurn) {
+        switch (true) {
             case (x > 0 && x < clickableMapSide / 3 && y > 0 && y < clickableMapSide / 3):
-                return[0, 0];
+                return [0, 0];
             case (x > clickableMapSide / 3 && x < clickableMapSide / 3 * 2 && y > 0 && y < clickableMapSide / 3):
-                return[0, 1];
+                return [0, 1];
             case (x > clickableMapSide / 3 * 2 && x < clickableMapSide && y > 0 && y < clickableMapSide / 3):
-                return[0, 2];
+                return [0, 2];
             case (x > 0 && x < clickableMapSide / 3 && y > clickableMapSide / 3 && y < clickableMapSide / 3 * 2):
-                return[1, 0];
+                return [1, 0];
             case (x > 0 && x < clickableMapSide / 3 && y > clickableMapSide / 3 * 2 && y < clickableMapSide):
-                return[2, 0];
+                return [2, 0];
             case (x > clickableMapSide / 3 * 2 && x < clickableMapSide && y > clickableMapSide / 3 && y < clickableMapSide / 3 * 2):
-                return[1, 2];
+                return [1, 2];
             case (x > clickableMapSide / 3 && x < clickableMapSide / 3 * 2 && y > clickableMapSide / 3 * 2 && y < clickableMapSide):
-                return[2, 1];
+                return [2, 1];
             case (x > clickableMapSide / 3 && x < clickableMapSide / 3 * 2 && y > clickableMapSide / 3 && y < clickableMapSide / 3 * 2):
-                return[1, 1];
+                return [1, 1];
             case (x > clickableMapSide / 3 * 2 && x < clickableMapSide && y > clickableMapSide / 3 * 2 && y < clickableMapSide):
-                return[2, 2];
+                return [2, 2];
         }
     }
 
-    function finishRound(checkProgress, game) {
+    function gameFlow(canvas, event, ) {
+        let clickIndex = clickHandler(canvas, event, );
+        playerMoove(...clickIndex);
+    }
+
+    function finishGame() {
         if (checkProgress(game)[0]) {
             canvas.removeEventListener('click', handler);
             if (checkProgress(game)[1]) {
@@ -124,13 +124,9 @@ window.addEventListener("load", (game) => {
 
     function trigerCPUMoove() {
         setTimeout(() => {
-            let testMode = document.getElementById('testmode').checked;
-            if (testMode) {
-                
-            } else {
-                cpuMoove(game, checkProgress);
-                finishRound(checkProgress, game);
-            }
+            cpuMoove();
+            finishGame();
+
         }, 1000);
     }
 
@@ -142,7 +138,7 @@ window.addEventListener("load", (game) => {
         }
     }
 
-    function checkProgress(game) {
+    function checkProgress() {
         let isItOver = false;
         let didIWin = false;
 
@@ -182,13 +178,13 @@ window.addEventListener("load", (game) => {
         return [isItOver, didIWin];
     }
 
-    function cpuMoove(currentGame, checkProgress) {
-        if (checkProgress(currentGame)[0]) {
+    function cpuMoove() {
+        if (checkProgress(game)[0]) {
             return;
         }
 
         //chechk if there is free space
-        let allMooves = [...currentGame[0], ...currentGame[1], ...currentGame[2]];
+        let allMooves = [...game[0], ...game[1], ...game[2]];
         if (!allMooves.includes('')) {
             return;
         }
@@ -196,16 +192,16 @@ window.addEventListener("load", (game) => {
         do {
             indexOfRow = randomNumber();
             indexOfCCol = randomNumber();
-        } while (currentGame[indexOfRow][indexOfCCol] !== "");
+        } while (game[indexOfRow][indexOfCCol] !== "");
 
 
 
 
         for (let i = 0; i < 3; i++) {
-            let lineOfX = currentGame[i].filter(cell => cell === 'X');
+            let lineOfX = game[i].filter(cell => cell === 'X');
             if (JSON.stringify(lineOfX) === JSON.stringify(["X", "X"])) {
                 for (let j = 0; j < 3; j++) {
-                    if (currentGame[i][j] === '') {
+                    if (game[i][j] === '') {
                         indexOfRow = i;
                         indexOfCCol = j;
                     }
@@ -214,14 +210,14 @@ window.addEventListener("load", (game) => {
         }
         let coordinates = transformIndexToCoordinate(indexOfRow, indexOfCCol);
         drawO(...coordinates);
-        currentGame[indexOfRow][indexOfCCol] = 'O';
+        game[indexOfRow][indexOfCCol] = 'O';
     }
 
 
 
 
 
-    const handler = e => gameFlow(canvas, e, isItMyTurn);
+    const handler = e => gameFlow(canvas, e, );
 
     canvas.addEventListener('click', handler);
 });
