@@ -127,8 +127,13 @@ window.addEventListener("load", (game) => {
 
     function trigerCPUMoove() {
         setTimeout(() => {
-            cpuMoove(game, checkProgress);
-            finishRound(checkProgress, game)
+            let testMode = document.getElementById('testmode').checked;
+            if (testMode) {
+                
+            } else {
+                cpuMoove(game, checkProgress);
+                finishRound(checkProgress, game);
+            }
         }, 1000);
     }
 
@@ -198,7 +203,7 @@ window.addEventListener("load", (game) => {
 
 
 
-        
+
         for (let i = 0; i < 3; i++) {
             let lineOfX = currentGame[i].filter(cell => cell === 'X');
             if (JSON.stringify(lineOfX) === JSON.stringify(["X", "X"])) {
@@ -213,6 +218,11 @@ window.addEventListener("load", (game) => {
         let coordinates = transformIndexToCoordinate(indexOfRow, indexOfCCol);
         drawO(...coordinates);
         currentGame[indexOfRow][indexOfCCol] = 'O';
+    }
+
+    function testCPUMoove(params) {
+
+
     }
 
 

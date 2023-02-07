@@ -62,3 +62,7 @@ button:active {
 .btn-green:hover .icon {
     transform: rotate(360deg) scale(1.2);
 }
+
+input, label{
+    align-self: flex-end;
+}
