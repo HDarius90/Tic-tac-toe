@@ -205,15 +205,26 @@ window.addEventListener("load", (game) => {
         drawO(indexOfRow, indexOfCCol, ...coordinates);
     }
 
+    function cpuTestMoove(rowIndex, colIndex) {
+        if (game[rowIndex][colIndex] === '') {
+            let coordinates = transformIndexToCoordinate(rowIndex, colIndex);
+            drawO(rowIndex, colIndex, ...coordinates);
+        }
+    }
+
+
     async function gameFlow(canvas, event) {
         let testmode = document.getElementById('testmode').checked;
-        if(isItMyTurn){
+        if (isItMyTurn) {
             let clickIndex = clickHandler(canvas, event);
             playerMoove(...clickIndex);
         }
-        if(!testmode){
-            await trigerCPUMoove();         
-        }       
+        if (!testmode) {
+            await trigerCPUMoove();
+        } else if(testmode && !isItMyTurn){
+            let clickIndex = clickHandler(canvas, event);
+            cpuTestMoove(...clickIndex);
+        }
         finishGame();
     }
 
