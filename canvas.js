@@ -32,7 +32,7 @@ window.addEventListener("load", (game) => {
         ctx.stroke();
     }
 
-    function drawX(rowIndex, colIndex, x, y,) {
+    function drawX(rowIndex, colIndex, x, y) {
         ctx.strokeStyle = '#545454';
         ctx.beginPath();
         ctx.moveTo(x + clickableMapSide / 17.575, y + clickableMapSide / 17.575);
@@ -42,13 +42,16 @@ window.addEventListener("load", (game) => {
         ctx.stroke();
         ctx.closePath();
         game[rowIndex][colIndex] = 'X';
+        isItMyTurn = false;
     }
 
-    function drawO(x, y) {
+    function drawO(rowIndex, colIndex, x, y) {
         ctx.strokeStyle = 'white';
         ctx.beginPath();
         ctx.arc(x + clickableMapSide / 6, y + clickableMapSide / 6, clickableMapSide / 10, 0, 2 * Math.PI);
         ctx.stroke();
+        game[rowIndex][colIndex] = 'O';
+        isItMyTurn = true;
     }
 
     function randomNumber() {
@@ -118,7 +121,6 @@ window.addEventListener("load", (game) => {
     function trigerCPUMoove() {
         setTimeout(() => {
             cpuMoove();
-            finishGame();
         }, 1000);
     }
 
@@ -126,7 +128,6 @@ window.addEventListener("load", (game) => {
         if (game[rowIndex][colIndex] === '') {
             let coordinates = transformIndexToCoordinate(rowIndex, colIndex);
             drawX(rowIndex, colIndex, ...coordinates);
-            isItMyTurn = false;
         }
     }
 
@@ -201,20 +202,19 @@ window.addEventListener("load", (game) => {
             }
         }
         let coordinates = transformIndexToCoordinate(indexOfRow, indexOfCCol);
-        drawO(...coordinates);
-        game[indexOfRow][indexOfCCol] = 'O';
-        isItMyTurn = true;
+        drawO(indexOfRow, indexOfCCol, ...coordinates);
     }
 
-    function gameFlow(canvas, event) {
+    async function gameFlow(canvas, event) {
         let testmode = document.getElementById('testmode').checked;
         if(isItMyTurn){
             let clickIndex = clickHandler(canvas, event);
             playerMoove(...clickIndex);
         }
         if(!testmode){
-            trigerCPUMoove();         
+            await trigerCPUMoove();         
         }       
+        finishGame();
     }
 
 
