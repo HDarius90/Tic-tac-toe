@@ -1,8 +1,14 @@
-window.addEventListener("load", (game) => {
+import ticTacToeAiEngine  from 'tic-tac-toe-ai-engine';
+
+window.addEventListener("load", (gameState) => {
     const canvas = document.querySelector('#canvas');
     const ctx = canvas.getContext("2d");
     let isItMyTurn = true;
-    game = ["", "", "", "", "", "", "", "", ""];
+    gameState = ["", "", "", "", "", "", "", "", ""];
+
+    
+ 
+   ticTacToeAiEngine.computeMove(gameState);
 
     const clickableMapSide = window.innerHeight * 0.7 - 150;
     canvas.height = clickableMapSide;
@@ -32,7 +38,7 @@ window.addEventListener("load", (game) => {
         ctx.stroke();
     }
 
-    function drawX(rowIndex, colIndex, x, y) {
+    function drawX(clickIndex, x, y) {
         ctx.strokeStyle = '#545454';
         ctx.beginPath();
         ctx.moveTo(x + clickableMapSide / 17.575, y + clickableMapSide / 17.575);
@@ -41,42 +47,39 @@ window.addEventListener("load", (game) => {
         ctx.lineTo(x + clickableMapSide / 17.575, y + clickableMapSide / 3.7217);
         ctx.stroke();
         ctx.closePath();
-        game[rowIndex][colIndex] = 'X';
+        gameState[clickIndex] = 'X';
         isItMyTurn = false;
     }
 
-    function drawO(rowIndex, colIndex, x, y) {
+    function drawO(clickIndex, x, y) {
         ctx.strokeStyle = 'white';
         ctx.beginPath();
         ctx.arc(x + clickableMapSide / 6, y + clickableMapSide / 6, clickableMapSide / 10, 0, 2 * Math.PI);
         ctx.stroke();
-        game[rowIndex][colIndex] = 'O';
+        gameState[clickIndex] = 'O';
         isItMyTurn = true;
     }
 
-    function randomNumber() {
-        return Math.floor((Math.random() * 3));
-    }
 
-    function transformIndexToCoordinate(indexOfRow, indexOfCCol) {
-        switch (true) {
-            case (indexOfRow === 0 && indexOfCCol === 0):
+    function transformIndexToCoordinate(clickIndex) {
+        switch (clickIndex) {
+            case (0):
                 return [0, 0];
-            case (indexOfRow === 0 && indexOfCCol === 1):
+            case (1):
                 return [clickableMapSide / 3, 0];
-            case (indexOfRow === 0 && indexOfCCol === 2):
+            case (2):
                 return [clickableMapSide / 3 * 2, 0];
-            case (indexOfRow === 1 && indexOfCCol === 0):
+            case (3):
                 return [0, clickableMapSide / 3];
-            case (indexOfRow === 1 && indexOfCCol === 1):
+            case (4):
                 return [clickableMapSide / 3, clickableMapSide / 3];
-            case (indexOfRow === 1 && indexOfCCol === 2):
+            case (5):
                 return [clickableMapSide / 3 * 2, clickableMapSide / 3];
-            case (indexOfRow === 2 && indexOfCCol === 0):
+            case (6):
                 return [0, clickableMapSide / 3 * 2];
-            case (indexOfRow === 2 && indexOfCCol === 1):
+            case (7):
                 return [clickableMapSide / 3, clickableMapSide / 3 * 2];
-            case (indexOfRow === 2 && indexOfCCol === 2):
+            case (8):
                 return [clickableMapSide / 3 * 2, clickableMapSide / 3 * 2];
         }
     }
@@ -108,11 +111,11 @@ window.addEventListener("load", (game) => {
     }
 
     function finishGame() {
-        if (checkProgress(game)[0]) {
+        if (checkProgress(gameState)[0]) {
             canvas.removeEventListener('click', handler);
-            if (checkProgress(game)[1]) {
+            if (checkProgress(gameState)[1]) {
                 document.getElementById("result").innerText = "winner";
-            } else if (!checkProgress(game)[1]) {
+            } else if (!checkProgress(gameState)[1]) {
                 document.getElementById("result").innerText = "looser";
             }
         }
@@ -124,14 +127,27 @@ window.addEventListener("load", (game) => {
         }, 1000);
     }
 
-    function playerMoove(rowIndex, colIndex) {
-        if (game[rowIndex][colIndex] === '') {
-            let coordinates = transformIndexToCoordinate(rowIndex, colIndex);
-            drawX(rowIndex, colIndex, ...coordinates);
+    function playerMoove(clickIndex) {
+        if (game[clickIndex] === '') {
+            let coordinates = transformIndexToCoordinate(clickIndex);
+            drawX(clickIndex, ...coordinates);
         }
     }
 
-    function checkProgress() {
+    function checkProgress(gameState) {
+        //convert gameState into arrayOfarray
+        let game = [];
+        for (let i = 1; i < 4; i++) {
+            let row = [];
+            for (let z = 0; z < 3; z++) {
+                row += gameState[i*z];
+            }
+            game += row;
+        }
+
+
+
+
         let isItOver = false;
         let didIWin = false;
 
@@ -175,61 +191,26 @@ window.addEventListener("load", (game) => {
         if (checkProgress(game)[0]) {
             return;
         }
-
-        //chechk if there is free space
-        let allMooves = [...game[0], ...game[1], ...game[2]];
-        if (!allMooves.includes('')) {
-            return;
-        }
-        //generate random index for empty space
-        do {
-            indexOfRow = randomNumber();
-            indexOfCCol = randomNumber();
-        } while (game[indexOfRow][indexOfCCol] !== "");
-
-
-
-        //if it finds rows where there is two X and a space then index will be changed for that space
-        for (let i = 0; i < 3; i++) {
-            let lineOfX = game[i].filter(cell => cell === 'X');
-            if (JSON.stringify(lineOfX) === JSON.stringify(["X", "X"])) {
-                for (let j = 0; j < 3; j++) {
-                    if (game[i][j] === '') {
-                        indexOfRow = i;
-                        indexOfCCol = j;
-                    }
-                }
-            }
-        }
-
-        //if it finds cols where there is two X and a space then index will be changed for that space
-
-        for (let i = 0; i < 3; i++) {
-            let compareCol = "";
-            for (let j = 0; j < 3; j++) {
-                compareCol += game[j][i];
-            }
-            if (compareCol === 'XX') {
-                for (let z = 0; z < 3; z++) {
-                    if (game[z][i] === '') {
-                        indexOfRow = i;
-                        indexOfCCol = z;
-                    }
-                }
+        let nexMoove = ticTacToeAiEngine.computeMove(gameState);
+        let indexOfNewMoove;
+        for (let i = 0; i < 9; i++){
+            if(gameState[i] !== nexMoove.nextBestGameState[i]){
+                indexOfNewMoove = i;
             }
         }
 
 
 
 
-        let coordinates = transformIndexToCoordinate(indexOfRow, indexOfCCol);
-        drawO(indexOfRow, indexOfCCol, ...coordinates);
+
+        let coordinates = transformIndexToCoordinate(indexOfNewMoove);
+        drawO(indexOfNewMoove, ...coordinates);
     }
 
-    function cpuTestMoove(rowIndex, colIndex) {
-        if (game[rowIndex][colIndex] === '') {
-            let coordinates = transformIndexToCoordinate(rowIndex, colIndex);
-            drawO(rowIndex, colIndex, ...coordinates);
+    function cpuTestMoove(clickIndex) {
+        if (game[clickIndex] === '') {
+            let coordinates = transformIndexToCoordinate(clickIndex);
+            drawO(clickIndex, ...coordinates);
         }
     }
 

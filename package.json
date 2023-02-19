@@ -1,4 +1,21 @@
 {
+  "name": "tic-tac-toe",
+  "version": "1.0.0",
+  "description": "The famous Tic-Tac-Toe game.",
+  "main": "canvas.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HDarius90/Tic-tac-toe.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HDarius90/Tic-tac-toe/issues"
+  },
+  "homepage": "https://github.com/HDarius90/Tic-tac-toe#readme",
   "dependencies": {
     "tic-tac-toe-ai-engine": "^1.0.9"
   }
