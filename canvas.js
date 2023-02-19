@@ -2,7 +2,7 @@ window.addEventListener("load", (game) => {
     const canvas = document.querySelector('#canvas');
     const ctx = canvas.getContext("2d");
     let isItMyTurn = true;
-    game = [["", "", ""], ["", "", ""], ["", "", ""]];
+    game = ["", "", "", "", "", "", "", "", ""];
 
     const clickableMapSide = window.innerHeight * 0.7 - 150;
     canvas.height = clickableMapSide;
@@ -87,23 +87,23 @@ window.addEventListener("load", (game) => {
         const y = event.clientY - rect.top
         switch (true) {
             case (x > 0 && x < clickableMapSide / 3 && y > 0 && y < clickableMapSide / 3):
-                return [0, 0];
+                return 0;
             case (x > clickableMapSide / 3 && x < clickableMapSide / 3 * 2 && y > 0 && y < clickableMapSide / 3):
-                return [0, 1];
+                return 1;
             case (x > clickableMapSide / 3 * 2 && x < clickableMapSide && y > 0 && y < clickableMapSide / 3):
-                return [0, 2];
+                return 2;
             case (x > 0 && x < clickableMapSide / 3 && y > clickableMapSide / 3 && y < clickableMapSide / 3 * 2):
-                return [1, 0];
-            case (x > 0 && x < clickableMapSide / 3 && y > clickableMapSide / 3 * 2 && y < clickableMapSide):
-                return [2, 0];
-            case (x > clickableMapSide / 3 * 2 && x < clickableMapSide && y > clickableMapSide / 3 && y < clickableMapSide / 3 * 2):
-                return [1, 2];
-            case (x > clickableMapSide / 3 && x < clickableMapSide / 3 * 2 && y > clickableMapSide / 3 * 2 && y < clickableMapSide):
-                return [2, 1];
+                return 3;
             case (x > clickableMapSide / 3 && x < clickableMapSide / 3 * 2 && y > clickableMapSide / 3 && y < clickableMapSide / 3 * 2):
-                return [1, 1];
+                return 4;
+            case (x > clickableMapSide / 3 * 2 && x < clickableMapSide && y > clickableMapSide / 3 && y < clickableMapSide / 3 * 2):
+                return 5;
+            case (x > 0 && x < clickableMapSide / 3 && y > clickableMapSide / 3 * 2 && y < clickableMapSide):
+                return 6;
+            case (x > clickableMapSide / 3 && x < clickableMapSide / 3 * 2 && y > clickableMapSide / 3 * 2 && y < clickableMapSide):
+                return 7;
             case (x > clickableMapSide / 3 * 2 && x < clickableMapSide && y > clickableMapSide / 3 * 2 && y < clickableMapSide):
-                return [2, 2];
+                return 8;
         }
     }
 
@@ -181,7 +181,7 @@ window.addEventListener("load", (game) => {
         if (!allMooves.includes('')) {
             return;
         }
-
+        //generate random index for empty space
         do {
             indexOfRow = randomNumber();
             indexOfCCol = randomNumber();
@@ -189,7 +189,7 @@ window.addEventListener("load", (game) => {
 
 
 
-
+        //if it finds rows where there is two X and a space then index will be changed for that space
         for (let i = 0; i < 3; i++) {
             let lineOfX = game[i].filter(cell => cell === 'X');
             if (JSON.stringify(lineOfX) === JSON.stringify(["X", "X"])) {
@@ -201,6 +201,27 @@ window.addEventListener("load", (game) => {
                 }
             }
         }
+
+        //if it finds cols where there is two X and a space then index will be changed for that space
+
+        for (let i = 0; i < 3; i++) {
+            let compareCol = "";
+            for (let j = 0; j < 3; j++) {
+                compareCol += game[j][i];
+            }
+            if (compareCol === 'XX') {
+                for (let z = 0; z < 3; z++) {
+                    if (game[z][i] === '') {
+                        indexOfRow = i;
+                        indexOfCCol = z;
+                    }
+                }
+            }
+        }
+
+
+
+
         let coordinates = transformIndexToCoordinate(indexOfRow, indexOfCCol);
         drawO(indexOfRow, indexOfCCol, ...coordinates);
     }
@@ -217,13 +238,13 @@ window.addEventListener("load", (game) => {
         let testmode = document.getElementById('testmode').checked;
         if (isItMyTurn) {
             let clickIndex = clickHandler(canvas, event);
-            playerMoove(...clickIndex);
+            playerMoove(clickIndex);
         }
         if (!testmode) {
             await trigerCPUMoove();
-        } else if(testmode && !isItMyTurn){
+        } else if (testmode && !isItMyTurn) {
             let clickIndex = clickHandler(canvas, event);
-            cpuTestMoove(...clickIndex);
+            cpuTestMoove(clickIndex);
         }
         finishGame();
     }
