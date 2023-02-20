@@ -167,11 +167,11 @@ window.addEventListener("load", (gameState) => {
 
     function cpuMoove() {
         let gameStateToCalculateFrom = gameState.map((x) => x);
-        if(toogler.checked){
+        if (toogler.checked) {
             gameStateToCalculateFrom = revertGameState(gameStateToCalculateFrom);
         }
         let nexMoove = ticTacToeAiEngine.computeMove(gameStateToCalculateFrom);
-        if(toogler.checked){
+        if (toogler.checked) {
             nexMoove.nextBestGameState = revertGameState(nexMoove.nextBestGameState);
         }
 
@@ -214,7 +214,7 @@ window.addEventListener("load", (gameState) => {
                 revertedGameState[i] = 'O';
             } else if (gameState[i] === 'O') {
                 revertedGameState[i] = 'X';
-            } 
+            }
         }
         return revertedGameState;
     }
@@ -222,6 +222,7 @@ window.addEventListener("load", (gameState) => {
     const toogler = document.querySelector('#switch');
     const symbolX = document.querySelector('#symbol-X');
     const symbolO = document.querySelector('#symbol-O');
+    const instruct = document.querySelector('#instruct');
 
     const changeHandler = () => {
         symbolO.classList.toggle('selected');
@@ -231,6 +232,7 @@ window.addEventListener("load", (gameState) => {
     const gameStarter = e => {
         toogler.removeEventListener('change', changeHandler);
         toogler.disabled = true;
+        instruct.innerText = '';
         gameFlow(canvas, e);
     }
 
