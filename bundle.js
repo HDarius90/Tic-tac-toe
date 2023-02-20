@@ -50,7 +50,11 @@ window.addEventListener("load", (gameState) => {
         ctx.stroke();
         ctx.closePath();
         gameState[clickIndex] = 'X';
-        isItMyTurn = false;
+        if (toogler.checked) {
+            isItMyTurn = true;
+        } else {
+            isItMyTurn = false;
+        }
     }
 
     function drawO(clickIndex, x, y) {
@@ -59,7 +63,11 @@ window.addEventListener("load", (gameState) => {
         ctx.arc(x + clickableMapSide / 6, y + clickableMapSide / 6, clickableMapSide / 10, 0, 2 * Math.PI);
         ctx.stroke();
         gameState[clickIndex] = 'O';
-        isItMyTurn = true;
+        if (!toogler.checked) {
+            isItMyTurn = true;
+        } else {
+            isItMyTurn = false;
+        }
     }
 
     function transformIndexToCoordinate(clickIndex) {
@@ -134,7 +142,11 @@ window.addEventListener("load", (gameState) => {
     function playerMoove(clickIndex) {
         if (gameState[clickIndex] === '') {
             let coordinates = transformIndexToCoordinate(clickIndex);
-            drawX(clickIndex, ...coordinates);
+            if (toogler.checked === false) {
+                drawX(clickIndex, ...coordinates);
+            } else {
+                drawO(clickIndex, ...coordinates);
+            }
         }
     }
 
@@ -201,20 +213,21 @@ window.addEventListener("load", (gameState) => {
         }
 
         let coordinates = transformIndexToCoordinate(indexOfNewMoove);
-        drawO(indexOfNewMoove, ...coordinates);
+
+        if (toogler.checked === true) {
+            drawX(indexOfNewMoove, ...coordinates);
+        } else {
+            drawO(indexOfNewMoove, ...coordinates);
+        }
     }
 
     async function gameFlow(canvas, event) {
-        toogler.removeEventListener('change', changeHandler);
-        toogler.disabled = true;
-
         if (isItMyTurn) {
             let clickIndex = clickHandler(canvas, event);
             playerMoove(clickIndex);
             await trigerCPUMoove();
             await finishGame();
         }
-
     }
 
     const toogler = document.querySelector('#switch');
@@ -226,7 +239,11 @@ window.addEventListener("load", (gameState) => {
         symbolX.classList.toggle('selected');
     }
 
-    const gameStarter = e => gameFlow(canvas, e);
+    const gameStarter = e => {
+        toogler.removeEventListener('change', changeHandler);
+        toogler.disabled = true;
+        gameFlow(canvas, e);
+    }
 
     canvas.addEventListener('click', gameStarter);
     toogler.addEventListener('change', changeHandler);
