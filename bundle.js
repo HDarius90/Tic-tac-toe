@@ -120,7 +120,7 @@ window.addEventListener("load", (gameState) => {
     }
 
     function finishGame(nexMoove) {
-        if (checkProgress(gameState)[0]) {
+        if (nexMoove.depth === 0) {
             canvas.removeEventListener('click', gameStarter);
             if (nexMoove.winnder === 'X' && toogler.checked === false) {
                 document.getElementById("result").innerText = "winner";
@@ -152,67 +152,14 @@ window.addEventListener("load", (gameState) => {
         }
     }
 
-    function convertArrayToMatrix(gameState) {
-        let game = [];
-        for (let z = 0; z < 9; z += 3) {
-            game.push(gameState.slice(0 + z, 3 + z));
-        }
-        return game;
-    }
-
-    function checkProgress(gameState) {
-        let game = convertArrayToMatrix(gameState);
-
-        let isItOver = false;
-        let didIWin = false;
-
-        //check rows
-        for (const row of game) {
-            if (row[0] === row[1] && row[1] === row[2] && row[0]) {
-                isItOver = true;
-                if (row[0] === 'X') {
-                    didIWin = true;
-                    return [isItOver, didIWin];
-                }
-                return [isItOver, didIWin];
-            }
-        }
-
-        //check cols
-        for (let i = 0; i < 3; i++) {
-            if (game[0][i] === game[1][i] && game[1][i] === game[2][i] && game[0][i]) {
-                isItOver = true;
-                if (game[0][i] === 'X') {
-                    didIWin = true;
-                    return [isItOver, didIWin];
-                }
-                return [isItOver, didIWin];
-            }
-        }
-
-        //check crosses
-        if (((game[0][0] === game[1][1] && game[1][1] === game[2][2]) || (game[0][2] === game[1][1] && game[1][1] === game[2][0])) && game[1][1]) {
-            isItOver = true;
-            if (game[1][1] === 'X') {
-                didIWin = true;
-                return [isItOver, didIWin];
-            }
-            return [isItOver, didIWin];
-        }
-        return [isItOver, didIWin];
-    }
-
     function cpuMoove() {
-        if (checkProgress(gameState)[0]) {
-            return;
-        }
         let nexMoove = ticTacToeAiEngine.computeMove(gameState);
         console.log(nexMoove);
 
         if (nexMoove.depth === 0) {
             return nexMoove;
         }
-        
+
         let indexOfNewMoove;
         for (let i = 0; i < 9; i++) {
             if (gameState[i] !== nexMoove.nextBestGameState[i]) {
