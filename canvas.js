@@ -120,7 +120,7 @@ window.addEventListener("load", (gameState) => {
 
     function finishGame(nexMoove) {
         console.log(nexMoove.depth);
-        if (nexMoove.winner) {
+        if (nexMoove.winner && nexMoove.depth < 3) {
             canvas.removeEventListener('click', gameStarter);
             if (nexMoove.winnder === 'X' && toogler.checked === false) {
                 document.getElementById("result").innerText = "winner";
