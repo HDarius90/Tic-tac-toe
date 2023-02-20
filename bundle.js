@@ -1,6 +1,14 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 const ticTacToeAiEngine = require('tic-tac-toe-ai-engine');
 
+const toogler = document.querySelector('#switch');
+const symbolX = document.querySelector('#symbol-X');
+const symbolO = document.querySelector('#symbol-O');
+toogler.addEventListener('change', () => {
+        symbolO.classList.toggle('selected');
+        symbolX.classList.toggle('selected');
+})
+
 window.addEventListener("load", (gameState) => {
     const canvas = document.querySelector('#canvas');
     const ctx = canvas.getContext("2d");
@@ -60,7 +68,6 @@ window.addEventListener("load", (gameState) => {
         gameState[clickIndex] = 'O';
         isItMyTurn = true;
     }
-
 
     function transformIndexToCoordinate(clickIndex) {
         switch (clickIndex) {
@@ -131,7 +138,6 @@ window.addEventListener("load", (gameState) => {
         })
     }
 
-
     function playerMoove(clickIndex) {
         if (gameState[clickIndex] === '') {
             let coordinates = transformIndexToCoordinate(clickIndex);
@@ -201,16 +207,9 @@ window.addEventListener("load", (gameState) => {
             }
         }
 
-
-
-
-
         let coordinates = transformIndexToCoordinate(indexOfNewMoove);
         drawO(indexOfNewMoove, ...coordinates);
     }
-
-
-
 
     async function gameFlow(canvas, event) {
         if (isItMyTurn) {

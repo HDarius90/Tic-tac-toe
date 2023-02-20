@@ -1,5 +1,13 @@
 const ticTacToeAiEngine = require('tic-tac-toe-ai-engine');
 
+const toogler = document.querySelector('#switch');
+const symbolX = document.querySelector('#symbol-X');
+const symbolO = document.querySelector('#symbol-O');
+toogler.addEventListener('change', () => {
+        symbolO.classList.toggle('selected');
+        symbolX.classList.toggle('selected');
+})
+
 window.addEventListener("load", (gameState) => {
     const canvas = document.querySelector('#canvas');
     const ctx = canvas.getContext("2d");
@@ -59,7 +67,6 @@ window.addEventListener("load", (gameState) => {
         gameState[clickIndex] = 'O';
         isItMyTurn = true;
     }
-
 
     function transformIndexToCoordinate(clickIndex) {
         switch (clickIndex) {
@@ -130,7 +137,6 @@ window.addEventListener("load", (gameState) => {
         })
     }
 
-
     function playerMoove(clickIndex) {
         if (gameState[clickIndex] === '') {
             let coordinates = transformIndexToCoordinate(clickIndex);
@@ -200,16 +206,9 @@ window.addEventListener("load", (gameState) => {
             }
         }
 
-
-
-
-
         let coordinates = transformIndexToCoordinate(indexOfNewMoove);
         drawO(indexOfNewMoove, ...coordinates);
     }
-
-
-
 
     async function gameFlow(canvas, event) {
         if (isItMyTurn) {

@@ -7,8 +7,8 @@ input[type=checkbox]{
   label {
     cursor: pointer;
     text-indent: -9999px;
-    width: 200px;
-    height: 100px;
+    width: 100px;
+    height: 50px;
     background: grey;
     display: block;
     border-radius: 100px;
@@ -18,10 +18,10 @@ input[type=checkbox]{
   label:after {
     content: '';
     position: absolute;
-    top: 5px;
-    left: 5px;
-    width: 90px;
-    height: 90px;
+    top: 2.5px;
+    left: 2.5px;
+    width: 45px;
+    height: 45px;
     background: #fff;
     border-radius: 90px;
     transition: 0.3s;
@@ -37,10 +37,10 @@ input[type=checkbox]{
   }
   
   label:active:after {
-    width: 130px;
+    width: 65px;
   }
   
-  // centering
+  
   body {
     display: flex;
     justify-content: center;

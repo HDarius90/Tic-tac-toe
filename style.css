@@ -1,4 +1,4 @@
-body{
+body {
     margin: 0;
     padding: 0;
     background-color: #14BDAC;
@@ -12,10 +12,11 @@ body{
     margin-top: 3vh;
     /* border: 2px solid black; */
 }
-h1{
-   color: #545454;
-   font-size: 4em;
-   text-transform: uppercase;
+
+h1 {
+    color: #545454;
+    font-size: 4em;
+    text-transform: uppercase;
 }
 
 h4 {
@@ -26,6 +27,11 @@ h4 {
 span {
     box-sizing: border-box;
     margin: 0.6em;
+    transition: transform 0.3s;
+}
+
+.selected {
+    transform: translateY(-0.3em);
 }
 
 .sider button {
@@ -39,7 +45,7 @@ span {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-.sider{
+.sider {
     display: flex;
     align-items: center;
     font-size: 4em;
@@ -73,25 +79,27 @@ span {
 }
 
 #ply-again button:active {
-  top: 1px;
-  box-shadow: none;
+    top: 1px;
+    box-shadow: none;
 }
 
 .icon {
     position: absolute;
     left: 20px;
 }
+
 .btn-green {
     background: #0f816a;
     border-bottom: 2px solid #0f816a;
     box-shadow: inset 0 -2px #0f816a;
 }
+
 .btn-green .icon {
     width: 24px;
     height: 24px;
     transition: all 0.4s ease-in-out;
 }
+
 .btn-green:hover .icon {
     transform: rotate(360deg) scale(1.2);
 }
-
