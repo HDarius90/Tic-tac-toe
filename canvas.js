@@ -1,4 +1,4 @@
-import ticTacToeAiEngine from './node_modules/tic-tac-toe-ai-engine';
+const ticTacToeAiEngine = require('tic-tac-toe-ai-engine');
 
 window.addEventListener("load", (gameState) => {
     const canvas = document.querySelector('#canvas');
@@ -128,26 +128,24 @@ window.addEventListener("load", (gameState) => {
     }
 
     function playerMoove(clickIndex) {
-        if (game[clickIndex] === '') {
+        if (gameState[clickIndex] === '') {
             let coordinates = transformIndexToCoordinate(clickIndex);
             drawX(clickIndex, ...coordinates);
         }
     }
 
-    function checkProgress(gameState) {
-        //convert gameState into arrayOfarray
+    function convertArrayToMatrix(gameState) {
         let game = [];
-        let row = [];
-        for (let i = 0; i < 9; i++) {
-            row += gameState[i];
-            if (i % 3 === 2) {
-                game += row;
-                row = [];
-            }
+        for (let z = 0; z < 9; z += 3) {
+            game.push(gameState.slice(0 + z, 3 + z));
         }
+        console.log(gameState);
+        console.log(game);
+        return game;
+    }
 
-
-
+    async function checkProgress(gameState) {
+        let game = await convertArrayToMatrix(gameState);
 
         let isItOver = false;
         let didIWin = false;
@@ -189,7 +187,7 @@ window.addEventListener("load", (gameState) => {
     }
 
     function cpuMoove() {
-        if (checkProgress(game)[0]) {
+        if (checkProgress(gameState)[0]) {
             return;
         }
         let nexMoove = ticTacToeAiEngine.computeMove(gameState);
