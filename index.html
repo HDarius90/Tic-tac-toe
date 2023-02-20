@@ -5,25 +5,38 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="toggle_switch.css">
     <link rel="stylesheet" href="style.css">
+    
+
     <title>Tic-Tac-Toe</title>
 </head>
 
 <body>
+
+    <div class="sider">
+        <span>X</span>
+        <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
+        <span>O</span>
+    </div>
+
+    <h4>Indítsd el a játékot, vagy válassz játékost!</h4>
+
     <div>
         <canvas id="canvas"></canvas>
     </div>
-    <h1 id="result"></h1>
-    <div class="buttons">
-		<button onClick="window.location.reload();" class="btn-green">
-			<img class="icon" src="https://htmlacademy.ru/assets/icons/reload-6x-white.png"> Play Again
-		</button>
-	</div>
 
-      
+    <h1 id="result"></h1>
+
+    <div id="ply-again">
+        <button onClick="window.location.reload();" class="btn-green">
+            <img class="icon" src="https://htmlacademy.ru/assets/icons/reload-6x-white.png"> Play Again
+        </button>
+    </div>
+
+
 
     <script type="module" src="bundle.js"></script>
 </body>
 
 </html>
-
