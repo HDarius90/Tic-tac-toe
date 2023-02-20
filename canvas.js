@@ -122,10 +122,14 @@ window.addEventListener("load", (gameState) => {
     }
 
     function trigerCPUMoove() {
-        setTimeout(() => {
-            cpuMoove();
-        }, 1000);
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                cpuMoove();
+                resolve();
+            }, 1000);
+        })
     }
+
 
     function playerMoove(clickIndex) {
         if (gameState[clickIndex] === '') {
@@ -139,13 +143,11 @@ window.addEventListener("load", (gameState) => {
         for (let z = 0; z < 9; z += 3) {
             game.push(gameState.slice(0 + z, 3 + z));
         }
-        console.log(gameState);
-        console.log(game);
         return game;
     }
 
-    async function checkProgress(gameState) {
-        let game = await convertArrayToMatrix(gameState);
+    function checkProgress(gameState) {
+        let game = convertArrayToMatrix(gameState);
 
         let isItOver = false;
         let didIWin = false;
@@ -206,30 +208,18 @@ window.addEventListener("load", (gameState) => {
         drawO(indexOfNewMoove, ...coordinates);
     }
 
-    function cpuTestMoove(clickIndex) {
-        if (game[clickIndex] === '') {
-            let coordinates = transformIndexToCoordinate(clickIndex);
-            drawO(clickIndex, ...coordinates);
-        }
-    }
+
 
 
     async function gameFlow(canvas, event) {
-        let testmode = document.getElementById('testmode').checked;
         if (isItMyTurn) {
             let clickIndex = clickHandler(canvas, event);
             playerMoove(clickIndex);
-        }
-        if (!testmode) {
             await trigerCPUMoove();
-        } else if (testmode && !isItMyTurn) {
-            let clickIndex = clickHandler(canvas, event);
-            cpuTestMoove(clickIndex);
+            await finishGame();
         }
-        finishGame();
+
     }
-
-
 
 
     const handler = e => gameFlow(canvas, e);
