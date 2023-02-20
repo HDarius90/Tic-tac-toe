@@ -119,12 +119,14 @@ window.addEventListener("load", (gameState) => {
         }
     }
 
-    function finishGame() {
+    function finishGame(nexMoove) {
         if (checkProgress(gameState)[0]) {
             canvas.removeEventListener('click', gameStarter);
-            if (checkProgress(gameState)[1]) {
+            if (nexMoove.winnder === 'X' && toogler.checked === false) {
                 document.getElementById("result").innerText = "winner";
-            } else if (!checkProgress(gameState)[1]) {
+            } else if (nexMoove.winnder === 'O' && toogler.checked === true) {
+                document.getElementById("result").innerText = "winner";
+            } else {
                 document.getElementById("result").innerText = "looser";
             }
         }
@@ -133,8 +135,8 @@ window.addEventListener("load", (gameState) => {
     function trigerCPUMoove() {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                cpuMoove();
-                resolve();
+                let nexMoove = cpuMoove();
+                resolve(nexMoove);
             }, 1000);
         })
     }
@@ -205,6 +207,12 @@ window.addEventListener("load", (gameState) => {
             return;
         }
         let nexMoove = ticTacToeAiEngine.computeMove(gameState);
+        console.log(nexMoove);
+
+        if (nexMoove.depth === 0) {
+            return nexMoove;
+        }
+        
         let indexOfNewMoove;
         for (let i = 0; i < 9; i++) {
             if (gameState[i] !== nexMoove.nextBestGameState[i]) {
@@ -219,14 +227,15 @@ window.addEventListener("load", (gameState) => {
         } else {
             drawO(indexOfNewMoove, ...coordinates);
         }
+        return nexMoove;
     }
 
     async function gameFlow(canvas, event) {
         if (isItMyTurn) {
             let clickIndex = clickHandler(canvas, event);
             playerMoove(clickIndex);
-            await trigerCPUMoove();
-            await finishGame();
+            let nexMoove = await trigerCPUMoove();
+            await finishGame(nexMoove);
         }
     }
 
