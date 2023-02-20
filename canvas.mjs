@@ -1,4 +1,4 @@
-import ticTacToeAiEngine  from 'tic-tac-toe-ai-engine';
+import ticTacToeAiEngine from './node_modules/tic-tac-toe-ai-engine';
 
 window.addEventListener("load", (gameState) => {
     const canvas = document.querySelector('#canvas');
@@ -6,9 +6,9 @@ window.addEventListener("load", (gameState) => {
     let isItMyTurn = true;
     gameState = ["", "", "", "", "", "", "", "", ""];
 
-    
- 
-   ticTacToeAiEngine.computeMove(gameState);
+
+
+    ticTacToeAiEngine.computeMove(gameState);
 
     const clickableMapSide = window.innerHeight * 0.7 - 150;
     canvas.height = clickableMapSide;
@@ -137,12 +137,13 @@ window.addEventListener("load", (gameState) => {
     function checkProgress(gameState) {
         //convert gameState into arrayOfarray
         let game = [];
-        for (let i = 1; i < 4; i++) {
-            let row = [];
-            for (let z = 0; z < 3; z++) {
-                row += gameState[i*z];
+        let row = [];
+        for (let i = 0; i < 9; i++) {
+            row += gameState[i];
+            if (i % 3 === 2) {
+                game += row;
+                row = [];
             }
-            game += row;
         }
 
 
@@ -193,8 +194,8 @@ window.addEventListener("load", (gameState) => {
         }
         let nexMoove = ticTacToeAiEngine.computeMove(gameState);
         let indexOfNewMoove;
-        for (let i = 0; i < 9; i++){
-            if(gameState[i] !== nexMoove.nextBestGameState[i]){
+        for (let i = 0; i < 9; i++) {
+            if (gameState[i] !== nexMoove.nextBestGameState[i]) {
                 indexOfNewMoove = i;
             }
         }

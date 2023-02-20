@@ -1,6 +1,7 @@
 {
   "name": "tic-tac-toe",
   "version": "1.0.0",
+  "type": "module",
   "description": "The famous Tic-Tac-Toe game.",
   "main": "canvas.js",
   "scripts": {
