@@ -120,8 +120,8 @@ window.addEventListener("load", (gameState) => {
     }
 
     function finishGame(nexMoove) {
-        console.log(nexMoove.depth);
-        if (nexMoove.winner && nexMoove.depth < 3) {
+        console.log(nexMoove.depth, nexMoove.winner);
+        if (nexMoove.winner && nexMoove.depth < 2) {
             canvas.removeEventListener('click', gameStarter);
             if (nexMoove.winnder === 'X' && toogler.checked === false) {
                 document.getElementById("result").innerText = "winner";
@@ -167,14 +167,9 @@ window.addEventListener("load", (gameState) => {
     }
 
     function cpuMoove() {
-        let gameStateToCalculateFrom = gameState.map((x) => x);
-        if (toogler.checked) {
-            gameStateToCalculateFrom = revertGameState(gameStateToCalculateFrom);
-        }
-        let nexMoove = ticTacToeAiEngine.computeMove(gameStateToCalculateFrom);
-        if (toogler.checked) {
-            nexMoove.nextBestGameState = revertGameState(nexMoove.nextBestGameState);
-        }
+
+        let nexMoove = ticTacToeAiEngine.computeMove(gameState);
+
 
         console.log(nexMoove);
 
@@ -208,26 +203,19 @@ window.addEventListener("load", (gameState) => {
         }
     }
 
-    function revertGameState(gameState) {
-        let revertedGameState = ["", "", "", "", "", "", "", "", ""];
-        for (let i = 0; i < gameState.length; i++) {
-            if (gameState[i] === 'X') {
-                revertedGameState[i] = 'O';
-            } else if (gameState[i] === 'O') {
-                revertedGameState[i] = 'X';
-            }
-        }
-        return revertedGameState;
-    }
 
     const toogler = document.querySelector('#switch');
     const symbolX = document.querySelector('#symbol-X');
     const symbolO = document.querySelector('#symbol-O');
     const instruct = document.querySelector('#instruct');
 
-    const changeHandler = () => {
+    const changeHandler = e => {
         symbolO.classList.toggle('selected');
         symbolX.classList.toggle('selected');
+        toogler.removeEventListener('change', changeHandler);
+        toogler.disabled = true;
+        instruct.innerText = '';
+        gameFlow(canvas, e);
     }
 
     const gameStarter = e => {
