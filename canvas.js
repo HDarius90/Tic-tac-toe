@@ -2,15 +2,19 @@ const ticTacToeAiEngine = require('tic-tac-toe-ai-engine');
 
 
 window.addEventListener("load", (gameState) => {
+
+    //selecting elements
+    const toogler = document.querySelector('#switch');
+    const symbolX = document.querySelector('#symbol-X');
+    const symbolO = document.querySelector('#symbol-O');
+    const instruct = document.querySelector('#instruct');
     const canvas = document.querySelector('#canvas');
     const ctx = canvas.getContext("2d");
+
     let isItMyTurn = true;
     gameState = ["", "", "", "", "", "", "", "", ""];
 
-
-
-    ticTacToeAiEngine.computeMove(gameState);
-
+    //creating the canvas and the grid
     const clickableMapSide = window.innerHeight * 0.7 - 150;
     canvas.height = clickableMapSide;
     canvas.width = clickableMapSide;
@@ -199,28 +203,31 @@ window.addEventListener("load", (gameState) => {
             playerMoove(clickIndex);
             let nexMoove = await trigerCPUMoove();
             await finishGame(nexMoove);
+        } else {
+            let nexMoove = await trigerCPUMoove();
+            let clickIndex = clickHandler(canvas, event);
+            playerMoove(clickIndex);
+            await finishGame(nexMoove);
         }
     }
 
 
-    const toogler = document.querySelector('#switch');
-    const symbolX = document.querySelector('#symbol-X');
-    const symbolO = document.querySelector('#symbol-O');
-    const instruct = document.querySelector('#instruct');
+    //event handler functions
 
     const changeHandler = e => {
         symbolO.classList.toggle('selected');
         symbolX.classList.toggle('selected');
         toogler.removeEventListener('change', changeHandler);
         toogler.disabled = true;
-        instruct.innerText = '';
+        instruct.innerText = ' ';
+        isItMyTurn = false;
         gameFlow(canvas, e);
     }
 
     const gameStarter = e => {
         toogler.removeEventListener('change', changeHandler);
         toogler.disabled = true;
-        instruct.innerText = '';
+        instruct.innerText = ' ';
         gameFlow(canvas, e);
     }
 
