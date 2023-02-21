@@ -8,11 +8,14 @@ window.addEventListener("load", (gameState) => {
     const symbolX = document.querySelector('#symbol-X');
     const symbolO = document.querySelector('#symbol-O');
     const instruct = document.querySelector('#instruct');
+    const difficulty = document.querySelector('#difficulty');
     const canvas = document.querySelector('#canvas');
     const ctx = canvas.getContext("2d");
 
+
     let isItMyTurn = true;
     gameState = ["", "", "", "", "", "", "", "", ""];
+    let myChar = "X";
 
     //creating the canvas and the grid
     const clickableMapSide = window.innerHeight * 0.7 - 150;
@@ -122,14 +125,14 @@ window.addEventListener("load", (gameState) => {
         }
     }
 
-    function finishGame(nexMoove) {
-        console.log(nexMoove.depth, nexMoove.winner);
-        if (nexMoove.winner && nexMoove.depth < 2) {
+    function finishGame(nextMoove, char) {
+        console.log(`nextMoove.winner in finishGame: ${nextMoove.winner}`);
+        if (nextMoove.winner && nextMoove.depth < 2) {
             canvas.removeEventListener('click', gameStarter);
-            if (nexMoove.winnder === 'X' && toogler.checked === false) {
+            if ((nextMoove.winner === char)) {
                 document.getElementById("result").innerText = "winner";
-            } else if (nexMoove.winnder === 'O' && toogler.checked === true) {
-                document.getElementById("result").innerText = "winner";
+            } else if (nextMoove.winner !== char) {
+                document.getElementById("result").innerText = "looser";
             } else {
                 document.getElementById("result").innerText = "looser";
             }
@@ -139,8 +142,8 @@ window.addEventListener("load", (gameState) => {
     function trigerCPUMoove() {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                let nexMoove = cpuMoove();
-                resolve(nexMoove);
+                let nextMoove = cpuMoove();
+                resolve(nextMoove);
                 reject((err) => {
                     return err;
                 });
@@ -170,19 +173,122 @@ window.addEventListener("load", (gameState) => {
     }
 
     function cpuMoove() {
+        if (isThereSpace(gameState)) {
+            if (difficulty.value === 'easy') {
+                if (Math.random() < 0.5) {
+                    let nextMoove = ticTacToeAiEngine.computeMove(gameState);
+                    makeNextMoove(nextMoove);
+                    return nextMoove;
+                } else {
+                    if (toogler.checked) {
+                        let nextMoove = getRandomMoove(gameState, 'O');
+                        makeNextMoove(nextMoove);
+                        return nextMoove;
+                    } else {
+                        let nextMoove = getRandomMoove(gameState, 'X');
+                        makeNextMoove(nextMoove);
+                        return nextMoove;
+                    }
+                }
+            }
+        }
 
-        let nexMoove = ticTacToeAiEngine.computeMove(gameState);
 
 
-        console.log(nexMoove);
+    }
 
-        if (nexMoove.depth === 0) {
-            return nexMoove;
+    function getRandomMoove(gameState, char) {
+        let randomIndex;
+        do {
+            randomIndex = Math.floor(Math.random() * (gameState.length + 1));
+        } while (gameState[randomIndex] !== '');
+
+        let nextMoove = {
+            winner: '',
+            depth: 1,
+            nextBestGameState: gameState.map((x) => x),
+        }
+
+        let result = checkProgress(convertToMatrix(gameState), char);
+        console.log(`checkProgress result in randommoove: ${result}`);
+        if (result[0] && result[1]) {
+            nextMoove.winner = char;
+        }
+
+        nextMoove.nextBestGameState[randomIndex] = char;
+
+        console.log('mextMoove in getRandomMoove');
+        console.log(nextMoove);
+        return nextMoove;
+    }
+
+    function isThereSpace(gameState) {
+        let space = true;
+        for (const char of gameState) {
+            if (char === '') {
+                return space;
+            }
+        }
+        space = false;
+        return space;
+    }
+
+    function convertToMatrix(gameState) {
+        let stateInMatrix = [];
+        for (let z = 0; z < 9; z += 3) {
+            stateInMatrix.push(gameState.slice(0 + z, 3 + z));
+        }
+        return stateInMatrix;
+    }
+
+    function checkProgress(gameMatrix, char) {
+        console.log(`matrix a checkprogressben:`);
+        console.log(gameMatrix);
+        let isItOver = false;
+        let didIWin = false;
+        //check rows
+        for (const row of gameMatrix) {
+            if (row[0] === row[1] && row[1] === row[2] && row[0]) {
+                isItOver = true;
+                if (row[0] === char) {
+                    didIWin = true;
+                    return [isItOver, didIWin];
+                }
+                return [isItOver, didIWin];
+            }
+        }
+        //check cols
+        for (let i = 0; i < 3; i++) {
+            if (gameMatrix[0][i] === gameMatrix[1][i] && gameMatrix[1][i] === gameMatrix[2][i] && gameMatrix[0][i]) {
+                isItOver = true;
+                if (gameMatrix[0][i] === char) {
+                    didIWin = true;
+                    return [isItOver, didIWin];
+                }
+                return [isItOver, didIWin];
+            }
+        }
+        //check crosses
+        if (((gameMatrix[0][0] === gameMatrix[1][1] && gameMatrix[1][1] === gameMatrix[2][2]) || (gameMatrix[0][2] === gameMatrix[1][1] && gameMatrix[1][1] === gameMatrix[2][0])) && gameMatrix[1][1]) {
+            isItOver = true;
+            if (gameMatrix[1][1] === char) {
+                didIWin = true;
+                return [isItOver, didIWin];
+            }
+            return [isItOver, didIWin];
+        }
+        return [isItOver, didIWin];
+    }
+
+    function makeNextMoove(nextMoove) {
+
+        if (nextMoove.depth === 0) {
+            return nextMoove;
         }
 
         let indexOfNewMoove;
         for (let i = 0; i < 9; i++) {
-            if (gameState[i] !== nexMoove.nextBestGameState[i]) {
+            if (gameState[i] !== nextMoove.nextBestGameState[i]) {
                 indexOfNewMoove = i;
             }
         }
@@ -194,20 +300,23 @@ window.addEventListener("load", (gameState) => {
         } else {
             drawO(indexOfNewMoove, ...coordinates);
         }
-        return nexMoove;
+
     }
 
     async function gameFlow(canvas, event) {
+        if (!difficulty.value) {
+            difficulty[1].selected = true;
+        }
         if (isItMyTurn) {
             let clickIndex = clickHandler(canvas, event);
             playerMoove(clickIndex);
-            let nexMoove = await trigerCPUMoove();
-            await finishGame(nexMoove);
+            let nextMoove = await trigerCPUMoove();
+            await finishGame(nextMoove, myChar);
         } else {
-            let nexMoove = await trigerCPUMoove();
+            let nextMoove = await trigerCPUMoove();
             let clickIndex = clickHandler(canvas, event);
             playerMoove(clickIndex);
-            await finishGame(nexMoove);
+            await finishGame(nextMoove, myChar);
         }
     }
 
@@ -219,20 +328,19 @@ window.addEventListener("load", (gameState) => {
         symbolX.classList.toggle('selected');
         toogler.removeEventListener('change', changeHandler);
         toogler.disabled = true;
-        instruct.innerText = ' ';
+        instruct.style.color = '#14BDAC';
         isItMyTurn = false;
+        myChar = "O";
         gameFlow(canvas, e);
     }
 
     const gameStarter = e => {
         toogler.removeEventListener('change', changeHandler);
         toogler.disabled = true;
-        instruct.innerText = ' ';
+        instruct.style.color = '#14BDAC';
         gameFlow(canvas, e);
     }
 
     canvas.addEventListener('click', gameStarter);
     toogler.addEventListener('change', changeHandler);
-
-
 });
